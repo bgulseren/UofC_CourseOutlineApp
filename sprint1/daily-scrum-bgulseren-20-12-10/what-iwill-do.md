@@ -1,1 +1,2 @@
 - I need to get rid of echo id field, which is redundant.
+- Django code needs to be cleaned from unused models, views, etc.
