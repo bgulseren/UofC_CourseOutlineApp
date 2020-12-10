@@ -1,0 +1,4 @@
+- Completed tutorials on django.
+- Implemented a working rest api which interfaces Echo objects.
+- Installed postman to test my api.
+- Tested most of the rest methods and seems to be all working.
