@@ -20,7 +20,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     # specify model and fields 
     class Meta: 
         model = Product
-        fields = ('title', 'description', 'price', 'summary') 
+        fields = ('title', 'description', 'price', 'summary', 'brand') 
 
 class EchoSerializer(serializers.HyperlinkedModelSerializer): 
     # specify model and fields 
