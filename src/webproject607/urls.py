@@ -25,7 +25,6 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'products', views.ProductViewSet)
 router.register(r'apiechos', views.EchoViewSet) 
 
 urlpatterns = [

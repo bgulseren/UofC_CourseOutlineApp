@@ -1,8 +1,7 @@
 from django.contrib import admin
 
-from .models import Product, Echo
+from .models import Echo
 
-admin.site.register(Product)
 admin.site.register(Echo)
 
 # Register your models here.

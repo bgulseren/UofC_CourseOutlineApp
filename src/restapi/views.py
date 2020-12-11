@@ -10,7 +10,6 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from .serializers import *
-from .models import Product
 
 from rest_framework.decorators import api_view
 
@@ -33,12 +32,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 # create a viewset
-class ProductViewSet(viewsets.ModelViewSet): 
-    # define queryset 
-    queryset = Product.objects.all() 
-      
-    # specify serializer to be used 
-    serializer_class = ProductSerializer
 
 class EchoViewSet(viewsets.ModelViewSet): 
     # define queryset 

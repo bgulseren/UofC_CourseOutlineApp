@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 # import model from models.py 
-from .models import Product, Echo
+from .models import Echo
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,14 +16,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer): 
-    # specify model and fields 
-    class Meta: 
-        model = Product
-        fields = ('title', 'description', 'price', 'summary', 'brand') 
-
 class EchoSerializer(serializers.HyperlinkedModelSerializer): 
     # specify model and fields 
     class Meta: 
         model = Echo
-        fields = ('echoid','message') 
+        fields = ['message'] 
