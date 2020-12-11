@@ -1,0 +1,4 @@
+- I plan to clean the app.js code
+- currently, the whole application is written in 1 component
+- although this is fine because the application is small, it is better practice to break it up into smaller components
+- I plan to break it up into smaller components for better design
