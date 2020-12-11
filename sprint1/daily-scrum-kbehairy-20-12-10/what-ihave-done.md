@@ -1,0 +1,6 @@
+- Rewatched Mahmoud's REACT tutorial
+- Implemented the counter application
+- Tested application to make sure all functionalities are working
+    - inputting the counter value using Assign button and enter key
+    - incrementing counter using Increase button
+    - decrementing counter using Decrease button
