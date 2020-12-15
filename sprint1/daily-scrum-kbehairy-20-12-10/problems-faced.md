@@ -1,0 +1,1 @@
+I did not know how to create a react project or how to write javascript code
