@@ -1,2 +1,2 @@
 Django works pretty well.
-Reach worked pretty well.
+React worked pretty well.
