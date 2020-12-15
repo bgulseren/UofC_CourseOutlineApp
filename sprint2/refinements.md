@@ -1,0 +1,3 @@
+- Did the kick-off meeting of sprint 2 at Dec 15th 2020.
+- Decided on work share
+- Decided on adding a documentation folder for future reference.
