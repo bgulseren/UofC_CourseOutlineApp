@@ -1,0 +1,4 @@
+- Read project requirements 
+- Read the provided excel file to understand the format and what functionalities need to be implemented
+- Created a visual design for the front 
+- Typed bullet points on the required functionalities to be implemented
