@@ -1,5 +1,4 @@
 import "bulma/css/bulma.css";
-import{ useState } from "react";
 import React from 'react';
 
 const LearningOutcomeTableComponent = () => {
@@ -33,9 +32,9 @@ const GradeBreakdownTableComponent = () => {
       </thead>
       <tbody>
         <tr>
-          <th>Assignments</th>
-          <td>1,2,5</td>
-          <td>80%</td>
+          <th><input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  </th>
+          <td><input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  </td>
+          <td><input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  </td>
         </tr>
       </tbody>
     </table>
@@ -43,36 +42,32 @@ const GradeBreakdownTableComponent = () => {
 };
 
 
-const AddGradeComponentModal = () => {
-  return (
-    <div className="modal" id="addGradeModal">
-      <div className="modal-background"></div>
-      <div className="modal-content">
-        <h1 className="title">TEST</h1>
-      </div>
-      <button className="modal-close is-large" aria-label="close"></button>
-    </div>
-  );
-}
-
-
 const LearningOutcomesComponent = () => {
   function addLearningOutcomeClickHandler(){
-    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].insertRow(0)
+    let table = document.getElementById('learningOutcomesTable');
+    let ID = table.rows.length;
+    let text = document.getElementById('newLearningOutcome').value
+    let row = table.insertRow(-1);
+    let cell1 = row.insertCell(0);
+    let cell2 = row.insertCell(1);
+    cell1.innerHTML = ID;
+    cell2.innerHTML = text;
   }
 
   function deleteLearningOutcomeClickHandler(){
-    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(0)
+    let table = document.getElementById('learningOutcomesTable');
+    let ID = table.rows.length - 2;
+    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(ID)
+    console.log(ID)
   }
 
   return (
     <div>
-      <h1 className="title">Learning Outcomes</h1>
-      <LearningOutcomeTableComponent />      
-      <div className="buttons has-addons">
-        <button className="button is-primary" onClick={addLearningOutcomeClickHandler}>Add learning Outcome</button>
-        <button className="button is-danger" onClick={deleteLearningOutcomeClickHandler}>Delete Learning Outcome</button>
-      </div>
+      <h1 className="title">Learning Outcomes</h1>  
+      <input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  
+      <button className="button is-primary" onClick={addLearningOutcomeClickHandler}>Add learning Outcome</button>
+      <button className="button is-danger" onClick={deleteLearningOutcomeClickHandler}>Delete Learning Outcome</button>
+      <LearningOutcomeTableComponent />  
     </div>
   );
 };
@@ -80,15 +75,15 @@ const LearningOutcomesComponent = () => {
 
 const GradeBreakdownComponent = () => {
   function addButtonClickHandler(){
-    console.log("Open modal")
+    let table = document.getElementById('gradeBreakdownTable').getElementsByTagName('tbody')[0];
+    table.innerHTML += table.innerHTML;
   }
   function deleteButtonClickHandler(){
-    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(0)
   }
   return (
     <div>
       <h1 className="title">Final Grade Breakdown</h1>
-      <GradeBreakdownTableComponent />      
+      <GradeBreakdownTableComponent />   
       <div className="buttons has-addons">
         <button className="button is-primary" onClick={addButtonClickHandler}>Add Grade Component</button>
         <button className="button is-danger" onClick={deleteButtonClickHandler}>Delete Grade Component</button>
