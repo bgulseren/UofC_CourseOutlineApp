@@ -1,4 +1,5 @@
 import "bulma/css/bulma.css";
+import{ useState } from "react";
 import React from 'react';
 
 const LearningOutcomeTableComponent = () => {
@@ -42,21 +43,7 @@ const GradeBreakdownTableComponent = () => {
 };
 
 
-const LearningOutcomesComponent = () => {
-  return (
-    <div>
-      <h1 className="title">Learning Outcomes</h1>
-      <LearningOutcomeTableComponent />      
-      <div className="buttons has-addons">
-        <button className="button is-primary" onClick={()=>document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].insertRow(0)}>Add learning Outcome</button>
-        <button className="button is-danger" onClick={()=>document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(0)}>Delete Learning Outcome</button>
-      </div>
-    </div>
-  );
-};
-
-
-const AddGradeComponentPopup = () => {
+const AddGradeComponentModal = () => {
   return (
     <div className="modal" id="addGradeModal">
       <div className="modal-background"></div>
@@ -69,10 +56,31 @@ const AddGradeComponentPopup = () => {
 }
 
 
+const LearningOutcomesComponent = () => {
+  function addLearningOutcomeClickHandler(){
+    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].insertRow(0)
+  }
+
+  function deleteLearningOutcomeClickHandler(){
+    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(0)
+  }
+
+  return (
+    <div>
+      <h1 className="title">Learning Outcomes</h1>
+      <LearningOutcomeTableComponent />      
+      <div className="buttons has-addons">
+        <button className="button is-primary" onClick={addLearningOutcomeClickHandler}>Add learning Outcome</button>
+        <button className="button is-danger" onClick={deleteLearningOutcomeClickHandler}>Delete Learning Outcome</button>
+      </div>
+    </div>
+  );
+};
+
+
 const GradeBreakdownComponent = () => {
   function addButtonClickHandler(){
-    var modal = document.getElementById("addGradeModal");
-    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].insertRow()
+    console.log("Open modal")
   }
   function deleteButtonClickHandler(){
     document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(0)
@@ -85,7 +93,7 @@ const GradeBreakdownComponent = () => {
         <button className="button is-primary" onClick={addButtonClickHandler}>Add Grade Component</button>
         <button className="button is-danger" onClick={deleteButtonClickHandler}>Delete Grade Component</button>
       </div>
-      <textarea className="textarea" readOnly>This content is readonly</textarea>
+      <textarea className="textarea" readOnly>100%</textarea>
     </div>
   );
 };
