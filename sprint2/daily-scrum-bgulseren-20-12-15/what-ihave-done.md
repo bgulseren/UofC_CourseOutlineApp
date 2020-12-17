@@ -1,0 +1,3 @@
+- Had a meeting. Discussed on breakdown of items.
+- Created the github board and added items.
+- Created milestone1 and added related items to that.
