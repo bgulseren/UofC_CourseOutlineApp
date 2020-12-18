@@ -1,6 +1,6 @@
 import "bulma/css/bulma.css";
 import React from 'react';
-import { useState } from "react";
+// import { useState } from "react";
 import { Button } from '@material-ui/core';
 
 const LearningOutcomeTableComponent = () => {
@@ -79,7 +79,7 @@ const GradeBreakdownComponent = () => {
 
   function addButtonClickHandler(){
     let table = document.getElementById('gradeBreakdownTable').getElementsByTagName('tbody')[0];
-    let ID = table.rows.length - 1;
+    // let ID = table.rows.length - 1;
     let compName = document.getElementById('newGradeCompName')
     let compLOutcome = document.getElementById('newGradeLOutcome')
     let compWeight = document.getElementById('newGradeCompWeight')
