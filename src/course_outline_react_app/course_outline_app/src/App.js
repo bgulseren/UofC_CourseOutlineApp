@@ -1,5 +1,6 @@
 import "bulma/css/bulma.css";
 import React from 'react';
+import{ useState } from "react";
 
 const LearningOutcomeTableComponent = () => {
   return (
@@ -32,9 +33,9 @@ const GradeBreakdownTableComponent = () => {
       </thead>
       <tbody>
         <tr>
-          <th><input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  </th>
-          <td><input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  </td>
-          <td><input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  </td>
+          <th><input className="input" type="text" placeholder="Assignment/Exam/Project" id="newGradeCompName" />  </th>
+          <td><input className="input" type="text" placeholder="Learning Outcome *" id="newGradeLOutcome" />  </td>
+          <td><input className="input" type="text" placeholder="Percentage" id="newGradeCompWeight" />  </td>
         </tr>
       </tbody>
     </table>
@@ -72,13 +73,29 @@ const LearningOutcomesComponent = () => {
   );
 };
 
-
 const GradeBreakdownComponent = () => {
   function addButtonClickHandler(){
     let table = document.getElementById('gradeBreakdownTable').getElementsByTagName('tbody')[0];
-    table.innerHTML += table.innerHTML;
+    let ID = table.rows.length - 1;
+    let compName = document.getElementById('newGradeCompName')
+    let compLOutcome = document.getElementById('newGradeLOutcome')
+    let compWeight = document.getElementById('newGradeCompWeight')
+    let row = table.insertRow(-1);
+    let cell0 = row.insertCell(0);
+    let cell1 = row.insertCell(1);
+    let cell2 = row.insertCell(2);
+    cell0.innerHTML = compName.value;
+    cell1.innerHTML = compLOutcome.value;
+    cell2.innerHTML = compWeight.value;    // table.innerHTML += table.innerHTML;
   }
+  
   function deleteButtonClickHandler(){
+    let table = document.getElementById('gradeBreakdownTable').getElementsByTagName('tbody')[0];
+    let ID = table.rows.length - 1;
+    if (ID === 0) {
+      return <p>There are no grades</p>;
+    }
+    table.deleteRow(ID);
   }
   return (
     <div>
