@@ -1,0 +1,3 @@
+- implemented course description section
+- implemented learning outcomes section
+- tested adding and deleting learning outcomes

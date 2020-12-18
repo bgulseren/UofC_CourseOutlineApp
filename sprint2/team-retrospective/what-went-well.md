@@ -1,0 +1,3 @@
+- we used git well as a team and made collaboration seamless
+- we adopted new naming convention for branching for the different sprints which made it easier to go back and understand the code
+- we used github project board and that helped with communication and keeping track of tasks and deliverables

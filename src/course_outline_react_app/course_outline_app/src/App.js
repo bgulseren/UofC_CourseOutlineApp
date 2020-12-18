@@ -14,8 +14,7 @@ const LearningOutcomeTableComponent = () => {
       </thead>
       <tbody>
         <tr>
-          <th>1</th>
-          <td>Have a deep understanding, and practical knowledge of object oriented analysis, design, and development.</td>
+
         </tr>
       </tbody>
     </table>
@@ -47,20 +46,24 @@ const GradeBreakdownTableComponent = () => {
 const LearningOutcomesComponent = () => {
   function addLearningOutcomeClickHandler(){
     let table = document.getElementById('learningOutcomesTable');
-    let ID = table.rows.length;
-    let text = document.getElementById('newLearningOutcome').value
-    let row = table.insertRow(-1);
-    let cell1 = row.insertCell(0);
-    let cell2 = row.insertCell(1);
-    cell1.innerHTML = ID;
-    cell2.innerHTML = text;
+    let ID = table.rows.length-1;
+    let text = document.getElementById('newLearningOutcome');
+    if(text.value !== ''){
+      let row = table.insertRow(-1);
+      let cell1 = row.insertCell(0);
+      let cell2 = row.insertCell(1);
+      cell1.innerHTML = ID;
+      cell2.innerHTML = text.value;
+      text.value = '';
+    }
   }
 
   function deleteLearningOutcomeClickHandler(){
     let table = document.getElementById('learningOutcomesTable');
     let ID = table.rows.length - 2;
-    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(ID)
-    console.log(ID)
+    if(ID > 0){
+      document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(ID)
+    }
   }
 
   return (
@@ -154,7 +157,28 @@ function App() {
         <div className="container">
           <h1 className="title">Course Outline</h1>
             <textarea className="textarea" placeholder="Enter Text"></textarea>
-              <button className="button is-primary">Save</button>
+            <label> Course Hours: 
+              <input className="input" 
+                type="text" 
+                placeholder="Enter course hours  *" 
+                id="course-hours"
+                style={{ width:"155px", height:"30px" }} />  
+            </label>
+            <label> Academic Credits: 
+              <input className="input" 
+                type="text" 
+                placeholder="# of Credits*" 
+                id="acemedic-credits"
+                style={{ width:"100px", height:"30px" }} />  
+            </label>
+            <label> Course Calendar: 
+              <input className="input" 
+                type="text" 
+                placeholder="Enter calendar link  *" 
+                id="course-calendar"
+                style={{ width:"155px", height:"30px" }} />  
+            </label>
+            <button className="button is-primary">Save</button>
         </div>
       </section>
 

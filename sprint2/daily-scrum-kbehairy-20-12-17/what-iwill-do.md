@@ -1,0 +1,3 @@
+- plan to clean up the app.js file
+- currently, I have created seperate components but they all live in the App.js file
+- I plan to put those components in their own files to seperate them and make the application more readable
