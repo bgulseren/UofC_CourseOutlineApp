@@ -1,0 +1,2 @@
+- Not sure how to implement react
+- Not sure how to setup the github board

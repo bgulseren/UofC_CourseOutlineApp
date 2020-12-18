@@ -1,0 +1,2 @@
+- Not sure how to implement the front end design
+- Not sure which components need to be implemented
