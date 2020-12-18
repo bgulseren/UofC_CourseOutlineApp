@@ -1,0 +1,5 @@
+- seperating the components into different files to clean up App.js
+- need to implement input checks for the input fields
+    -example: user should not be able to input text for the 'weight' field in the grade breakdown section
+- should implememnt limitations on number of learning outcomes that can be added by user
+    -example: instructor can add a max of 10 learning outcomes

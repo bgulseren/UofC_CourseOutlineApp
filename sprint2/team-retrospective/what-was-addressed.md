@@ -1,0 +1,3 @@
+- implemented course outline section
+- implemented learning outcome section
+- implemented grade breakdown section
