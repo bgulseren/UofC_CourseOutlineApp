@@ -12,8 +12,7 @@ const LearningOutcomeTableComponent = () => {
       </thead>
       <tbody>
         <tr>
-          <th>1</th>
-          <td>Have a deep understanding, and practical knowledge of object oriented analysis, design, and development.</td>
+
         </tr>
       </tbody>
     </table>
@@ -45,20 +44,22 @@ const GradeBreakdownTableComponent = () => {
 const LearningOutcomesComponent = () => {
   function addLearningOutcomeClickHandler(){
     let table = document.getElementById('learningOutcomesTable');
-    let ID = table.rows.length;
-    let text = document.getElementById('newLearningOutcome').value
+    let ID = table.rows.length-1;
+    let text = document.getElementById('newLearningOutcome');
     let row = table.insertRow(-1);
     let cell1 = row.insertCell(0);
     let cell2 = row.insertCell(1);
     cell1.innerHTML = ID;
-    cell2.innerHTML = text;
+    cell2.innerHTML = text.value;
+    text.value = '';
   }
 
   function deleteLearningOutcomeClickHandler(){
     let table = document.getElementById('learningOutcomesTable');
     let ID = table.rows.length - 2;
-    document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(ID)
-    console.log(ID)
+    if(ID > 0){
+      document.getElementById('learningOutcomesTable').getElementsByTagName('tbody')[0].deleteRow(ID)
+    }
   }
 
   return (
