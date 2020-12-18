@@ -1,6 +1,7 @@
 import "bulma/css/bulma.css";
 import React from 'react';
-import{ useState } from "react";
+import { useState } from "react";
+import { Button } from '@material-ui/core';
 
 const LearningOutcomeTableComponent = () => {
   return (
@@ -66,8 +67,8 @@ const LearningOutcomesComponent = () => {
     <div>
       <h1 className="title">Learning Outcomes</h1>  
       <input className="input" type="text" placeholder="Learning Outcome *" id="newLearningOutcome" />  
-      <button className="button is-primary" onClick={addLearningOutcomeClickHandler}>Add learning Outcome</button>
-      <button className="button is-danger" onClick={deleteLearningOutcomeClickHandler}>Delete Learning Outcome</button>
+      <Button variant="contained" color="primary" onClick={addLearningOutcomeClickHandler}>Add learning Outcome</Button>
+      <Button variant="contained" color="secondary" onClick={deleteLearningOutcomeClickHandler}>Delete Learning Outcome</Button>
       <LearningOutcomeTableComponent />  
     </div>
   );
@@ -130,8 +131,8 @@ const GradeBreakdownComponent = () => {
       <h1 className="title">Final Grade Breakdown</h1>
       <GradeBreakdownTableComponent />   
       <div className="buttons has-addons">
-        <button className="button is-primary" onClick={addButtonClickHandler}>Add Grade Component</button>
-        <button className="button is-danger" onClick={deleteButtonClickHandler}>Delete Grade Component</button>
+        <Button variant="contained" color="primary" onClick={addButtonClickHandler}>Add Grade Component</Button>
+        <Button variant="contained" color="secondary" onClick={deleteButtonClickHandler}>Delete Grade Component</Button>
       </div>
       <label> Total Weight: % 
         <input className="output" 
