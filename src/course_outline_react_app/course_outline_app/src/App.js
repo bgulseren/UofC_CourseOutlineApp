@@ -74,29 +74,57 @@ const LearningOutcomesComponent = () => {
 };
 
 const GradeBreakdownComponent = () => {
+  let tWeight = 0; //total weight
+
   function addButtonClickHandler(){
     let table = document.getElementById('gradeBreakdownTable').getElementsByTagName('tbody')[0];
     let ID = table.rows.length - 1;
     let compName = document.getElementById('newGradeCompName')
     let compLOutcome = document.getElementById('newGradeLOutcome')
     let compWeight = document.getElementById('newGradeCompWeight')
-    let row = table.insertRow(-1);
-    let cell0 = row.insertCell(0);
-    let cell1 = row.insertCell(1);
-    let cell2 = row.insertCell(2);
-    cell0.innerHTML = compName.value;
-    cell1.innerHTML = compLOutcome.value;
-    cell2.innerHTML = compWeight.value;    // table.innerHTML += table.innerHTML;
+
+    // do not let exceeding %100
+
+    if (compName.value === "") {
+      console.log("component cannot be an empty string!");
+    } else if (compLOutcome.value === "") {
+      console.log("outcome cannot be an empty string");
+    } else if (isNaN((compWeight.value))) {
+      console.log("weight needs to be a number!");
+    } else if (tWeight + Number(compWeight.value) > 100) {
+      console.log("weight cannot exceed %100");
+    } else {
+      let row = table.insertRow(-1);
+      let cell0 = row.insertCell(0);
+      let cell1 = row.insertCell(1);
+      let cell2 = row.insertCell(2);
+      cell0.innerHTML = compName.value;
+      cell1.innerHTML = compLOutcome.value;
+      cell2.innerHTML = compWeight.value;
+
+      tWeight += Number(compWeight.value);
+      document.getElementById("total-weight").value = tWeight;
+    }
   }
   
   function deleteButtonClickHandler(){
     let table = document.getElementById('gradeBreakdownTable').getElementsByTagName('tbody')[0];
     let ID = table.rows.length - 1;
     if (ID === 0) {
-      return <p>There are no grades</p>;
+      tWeight = 0;
+      document.getElementById("total-weight").value = tWeight;
+    } else {
+      var weightToReduce = document.getElementById("gradeBreakdownTable").rows[ID+1].cells[2].innerText;
+      tWeight -= Number(weightToReduce);
+      if (tWeight < 0) {
+        tWeight = 0;
+      }
+      document.getElementById("total-weight").value = tWeight;
+      table.deleteRow(-1);
     }
-    table.deleteRow(ID);
+
   }
+
   return (
     <div>
       <h1 className="title">Final Grade Breakdown</h1>
@@ -105,7 +133,13 @@ const GradeBreakdownComponent = () => {
         <button className="button is-primary" onClick={addButtonClickHandler}>Add Grade Component</button>
         <button className="button is-danger" onClick={deleteButtonClickHandler}>Delete Grade Component</button>
       </div>
-      <textarea className="textarea" readOnly>100%</textarea>
+      <label> Total Weight: % 
+        <input className="output" 
+          type="text" 
+          id="total-weight"
+          style={{ width:"50px", height:"30px" }}
+          readOnly />
+      </label>
     </div>
   );
 };
