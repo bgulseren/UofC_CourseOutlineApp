@@ -131,12 +131,12 @@ const GradeBreakdownComponent = () => {
 
   return (
     <div>
-      <h1 className="title">Final Grade Breakdown</h1>
-      <GradeBreakdownTableComponent />   
+      <h1 className="title">Final Grade Breakdown</h1> 
       <div className="buttons has-addons">
         <Button variant="contained" color="primary" onClick={addButtonClickHandler}>Add Grade Component</Button>
         <Button variant="contained" color="secondary" onClick={deleteButtonClickHandler}>Delete Grade Component</Button>
       </div>
+      <GradeBreakdownTableComponent />  
       <label> Total Weight: % 
         <input className="output" 
           type="text" 
@@ -152,9 +152,12 @@ const GradeBreakdownComponent = () => {
 function App() {
   return (
     <div>
+    <div className="container" style={{ width:"800px"}}>
     <h1 className="title">Course Outline Generator</h1>
+    </div>
+
       <section className="outline section">
-        <div className="container">
+        <div className="container" style={{ width:"800px"}}>
           <h1 className="title">Course Outline</h1>
             <textarea className="textarea" placeholder="Enter Text"></textarea>
             <label> Course Hours: 
@@ -183,13 +186,13 @@ function App() {
       </section>
 
       <section className="learning outcomes section">
-        <div className="container">
+        <div className="container" style={{ width:"800px"}}>
           <LearningOutcomesComponent />  
         </div>
       </section>
 
       <section className="grade breakdown section">
-        <div className="container">
+        <div className="container" style={{ width:"800px"}}>
           <GradeBreakdownComponent />
         </div>
       </section>
