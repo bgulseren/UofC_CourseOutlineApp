@@ -1,6 +1,6 @@
 import "bulma/css/bulma.css";
-import React from 'react';
-// import { useState } from "react";
+import React, { useEffect } from 'react';
+import { useState } from "react";
 import { Button } from '@material-ui/core';
 
 const LearningOutcomeTableComponent = () => {
@@ -150,21 +150,63 @@ const GradeBreakdownComponent = () => {
 
 
 function App() {
+
+  const [outline, setOutline] = useState([{"text":"", "courseHours":"", "courseCredits":"", "calenderLink":""}]);
+  // const [courseHours, setCourseHours] = useState("");
+  // const [courseCredits, setCourseCredits] = useState("");
+  // const [calendarLink, setCalendarLink] = useState("");
+  const [learningOutcomes, setLearningOutcomes] = useState("");
+  // const [gradingComponents, setGradingComponents] = useState("");
+  // const [gradingWeights, setGradingWeights] = useState("");
+
+   // fetch course outlines from django api
+  async function fetchOutlines(){
+    const outlinesData = await fetch('http://127.0.0.1:8000/api/view-outlines/');
+    outlinesData.json().then(outlinesData => setOutline((outlinesData)));
+ }
+
+    // fetch learning outcomes from django api
+  async function fetchLearningOutcomes(){
+    const learningOutcomesData = await fetch('http://127.0.0.1:8000/api/view-learningoutcomes/');
+    learningOutcomesData.json().then(learningOutcomesData => setLearningOutcomes((learningOutcomesData)));
+  }
+
+  async function fetchData(){
+    fetchOutlines();
+    fetchLearningOutcomes();
+  }
+
   return (
     <div>
-    <div className="container" style={{ width:"800px"}}>
-    <h1 className="title">Course Outline Generator</h1>
+      <div className="container" style={{ width:"800px"}}>
+      <h1 className="title">Course Outline Generator</h1>
     </div>
+
+      <section className = "saved course selection">
+        <div className="container" style={{ width:"800px"}}>
+          <h1 className="title">Select Course</h1>
+          <label >Edit Existing Course:</label>
+            <select name="courses" id="courses">
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+              <option value="opel">Opel</option>
+              <option value="audi">Audi</option>
+            </select>
+            <button className="button is-primary" onClick={fetchData}>Import Data</button>
+        </div>
+      </section>
 
       <section className="outline section">
         <div className="container" style={{ width:"800px"}}>
           <h1 className="title">Course Outline</h1>
-            <textarea className="textarea" placeholder="Enter Text"></textarea>
+            <textarea className="textarea" placeholder="Enter Text" value={outline[0]["text"]} onChange={(e)=>setOutline(e.target.value)}></textarea>
             <label> Course Hours: 
               <input className="input" 
                 type="text" 
                 placeholder="Enter course hours  *" 
                 id="course-hours"
+                value={outline[0]["courseHours"]} 
+                onChange={(e)=>setOutline(e.target.value)}
                 style={{ width:"155px", height:"30px" }} />  
             </label>
             <label> Academic Credits: 
@@ -172,6 +214,8 @@ function App() {
                 type="text" 
                 placeholder="# of Credits*" 
                 id="acemedic-credits"
+                value={outline[0]["courseCredits"]} 
+                onChange={(e)=>setOutline(e.target.value)}
                 style={{ width:"100px", height:"30px" }} />  
             </label>
             <label> Course Calendar: 
@@ -179,6 +223,8 @@ function App() {
                 type="text" 
                 placeholder="Enter calendar link  *" 
                 id="course-calendar"
+                value={outline[0]["calenderLink"]} 
+                onChange={(e)=>setOutline(e.target.value)}
                 style={{ width:"155px", height:"30px" }} />  
             </label>
             <button className="button is-primary">Save</button>
