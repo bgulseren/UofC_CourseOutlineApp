@@ -25,7 +25,10 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'apiechos', views.EchoViewSet) 
+router.register(r'apicourses', views.CourseBasicDataViewSet) 
+router.register(r'apilearningOutcomes', views.LearningOutcomeViewSet)
+router.register(r'apitimetables', views.TimetableViewSet)
+router.register(r'apigradecomponents', views.GradeComponentViewSet) 
 
 urlpatterns = [
     url(r'^', include('restapi.urls')),

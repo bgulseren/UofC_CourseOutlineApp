@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 # import model from models.py 
-from .models import Echo
+from .models import LearningOutcome, Timetable, CourseBasicData, GradeComponent
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,8 +16,26 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
-class EchoSerializer(serializers.HyperlinkedModelSerializer): 
+class CourseBasicDataSerializer(serializers.HyperlinkedModelSerializer): 
     # specify model and fields 
     class Meta: 
-        model = Echo
-        fields = ['message'] 
+        model = CourseBasicData
+        fields = ['id', 'courseCode', 'courseName', 'courseDescription', 'courseHours', 'courseCalRef']
+
+class LearningOutcomeSerializer(serializers.HyperlinkedModelSerializer): 
+    # specify model and fields 
+    class Meta: 
+        model = LearningOutcome
+        fields = ['id', 'description', 'gradAttribute', 'instLevel']
+
+class TimetableSerializer(serializers.HyperlinkedModelSerializer): 
+    # specify model and fields 
+    class Meta: 
+        model = Timetable
+        fields = ['id', 'section', 'days', 'time', 'location']
+
+class GradeComponentSerializer(serializers.HyperlinkedModelSerializer): 
+    # specify model and fields 
+    class Meta: 
+        model = GradeComponent
+        fields = ['id', 'component', 'learningOutcomes', 'weight'] 
