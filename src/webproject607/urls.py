@@ -25,13 +25,15 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'apicourses', views.CourseBasicDataViewSet) 
-router.register(r'apilearningOutcomes', views.LearningOutcomeViewSet)
-router.register(r'apitimetables', views.TimetableViewSet)
-router.register(r'apigradecomponents', views.GradeComponentViewSet) 
+router.register(r'api/instructors', views.InstructorViewSet)
+router.register(r'api/courses', views.CourseViewSet)
+router.register(r'api/learningOutcomes', views.LearningOutcomeViewSet)
+router.register(r'api/timetables', views.TimetableViewSet)
+router.register(r'api/gradecomponents', views.GradeComponentViewSet)
+router.register(r'api/textbooks', views.InstructorViewSet) 
 
 urlpatterns = [
-    url(r'^', include('restapi.urls')),
+    # url(r'^', include('restapi.urls')),
     
     path('', home_view, name='home'),
     path('home', home_view, name='home'),

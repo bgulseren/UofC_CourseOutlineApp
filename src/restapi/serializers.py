@@ -2,40 +2,52 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 # import model from models.py 
-from .models import LearningOutcome, Timetable, CourseBasicData, GradeComponent
+from .models import *
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['url', 'username', 'email', 'groups']
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
 
-class CourseBasicDataSerializer(serializers.HyperlinkedModelSerializer): 
+class InstructorSerializer(serializers.ModelSerializer): 
     # specify model and fields 
     class Meta: 
-        model = CourseBasicData
-        fields = ['id', 'courseCode', 'courseName', 'courseDescription', 'courseHours', 'courseCalRef']
+        model = Instructor
+        fields = ['id', 'first_name', 'last_name', 'phone', 'office', 'email']
 
-class LearningOutcomeSerializer(serializers.HyperlinkedModelSerializer): 
+class CourseSerializer(serializers.ModelSerializer): 
+    # specify model and fields 
+    class Meta: 
+        model = Course
+        fields = ['id', 'instructor', 'code', 'name', 'description', 'hours', 'calendar_ref', 'grade_breakdown']
+
+class LearningOutcomeSerializer(serializers.ModelSerializer): 
     # specify model and fields 
     class Meta: 
         model = LearningOutcome
-        fields = ['id', 'description', 'gradAttribute', 'instLevel']
+        fields = ['id', 'course_id', 'description', 'gradAttribute', 'instLevel']
 
-class TimetableSerializer(serializers.HyperlinkedModelSerializer): 
+class TimetableSerializer(serializers.ModelSerializer): 
     # specify model and fields 
     class Meta: 
         model = Timetable
-        fields = ['id', 'section', 'days', 'time', 'location']
+        fields = ['id', 'course_id', 'instructor', 'instructor_type', 'section', 'section_type', 'days', 'time', 'location', 'hoursPerWeek', 'studentsPerInstructor']
 
-class GradeComponentSerializer(serializers.HyperlinkedModelSerializer): 
+class GradeComponentSerializer(serializers.ModelSerializer): 
     # specify model and fields 
     class Meta: 
         model = GradeComponent
-        fields = ['id', 'component', 'learningOutcomes', 'weight'] 
+        fields = ['id', 'course_id', 'component', 'learningOutcomes', 'weight']
+
+class TextbookSerializer(serializers.ModelSerializer): 
+    # specify model and fields 
+    class Meta: 
+        model = Textbook
+        fields = ['id', 'course_id', 'title', 'authors', 'edition', 'year', 'publisher', 'is_recommended'] 
