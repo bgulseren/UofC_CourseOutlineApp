@@ -471,17 +471,29 @@ return (
 
 We want to change the value of text again from a function (like a click handler), we can use
 
+```
 const handleClick = () => {
-setText('Hello New World');
+    setText('Hello New World');
 }
+```
 
 of course, if we refresh the page, text variable will go back its initialization value.
+
+Please note that changing value will call a re-render (check if correct?)
 
 - Handling arrays
 
 We can use arrays with useState hook, as React.useState([]), where [] indicates our array (here is an empty one)
 
 const [arr, setArr] = useState([]);
+
+### useEffect Hook
+
+useEffect( () => {}); means that this function will be called everytime re-render.
+
+useEffect( () => {}, []); means that [] condition is empty, therefore useEffect will only happen at the first render only.
+
+useEffect( () => {}, [value]); means that [value] dependency, therefore useEffect will only happen value changes and re-renders.
 
 ## Tips & Tricks
 
