@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { forwardRef } from 'react';
+import Avatar from 'react-avatar';
 
-import GradeComponent from './GradeComponent'
-import LearningOutcome from './LearningOutcome'
-import Timetable from './Timetable'
-import Textbook from './Textbook'
+import Course from './Course'
 
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
@@ -50,17 +48,22 @@ const api = axios.create({
   baseURL: `http://localhost:8000/api`
 })
 
-function Course({selinstructor}) {
+
+function validateEmail(email){
+  const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function Instructor() {
 
   var columns = [
     {title: "id", field: "id", hidden: true},
-    {title: "Instructor", field: "instructor", hidden: true},
-    {title: "Course code", field: "code"},
-    {title: "Course name", field: "name"},
-    {title: "Description", field: "description", hidden: true},
-    {title: "Hours", field: "hours"},
-    {title: "Calendar Reference", field: "calendar_ref", hidden: true},
-    {title: "Grade Breakdown", field: "grade_breakdown", hidden: true},
+    {title: "Avatar", render: rowData => <Avatar maxInitials={2} size={40} round={true} name={rowData === undefined ? " " : (rowData.first_name[0] + " " + rowData.last_name[0])} />  },
+    {title: "First name", field: "first_name"},
+    {title: "Last name", field: "last_name"},
+    {title: "Phone", field: "phone"},
+    {title: "Office", field: "office"},
+    {title: "email", field: "email"}
   ]
   const [data, setData] = useState([]); //table data
 
@@ -69,60 +72,52 @@ function Course({selinstructor}) {
   const [errorMessages, setErrorMessages] = useState([])
 
   const [isactive, setIsactive] = useState(true);
-  const [selcourse, setSelcourse] = useState(-1);
+  const [selinstructor, setSelinstructor] = useState(-1);
 
-  const [headermessage, setHeadermessage] = useState("Select a course from the list");
+  const [headermessage, setHeadermessage] = useState("Select an instructor from the list");
 
   useEffect(() => { 
-    refresh()
-  }, [])
-
-  const selectCourse = (course) => {
-    setIsactive(false)
-    setHeadermessage("Selected course: " + course.code + " - " + course.name)
-    setSelcourse(course.id)
-  }
-
-  const refresh = () => {
-    // update data
-    api.get("/courses/?instructor=" + selinstructor)
+    api.get("/instructors")
         .then(res => {               
             setData(res.data)
          })
          .catch(error=>{
              console.log("Error")
          })
+  }, [])
+
+  const selectInstructor = (instructor) => {
+    setIsactive(false)
+    setHeadermessage("List of courses for " + instructor.first_name + " " + instructor.last_name)
+    setSelinstructor(instructor.id)
   }
 
   const handleRowUpdate = (newData, oldData, resolve) => {
     //validation
     let errorList = []
-    if(newData.code === ""){
-      errorList.push("Please enter course code")
+    if(newData.first_name === ""){
+      errorList.push("Please enter first name")
     }
-    if(newData.name === ""){
-      errorList.push("Please enter course name")
+    if(newData.last_name === ""){
+      errorList.push("Please enter last name")
     }
-    if(newData.hours === ""){
-      errorList.push("Please enter course hours per week")
+    if(newData.office === ""){
+      errorList.push("Please enter office")
     }
-
-    let courseData = {
-      instructor: selinstructor,
-      code: newData.code,
-      name: newData.name,
-      description: newData.description,
-      hours: newData.hours,
-      calendar_ref: newData.calendar_ref,
-      grade_breakdown: newData.grade_breakdown,
+    if(newData.phone === ""){
+      errorList.push("Please enter phone")
+    }
+    if(newData.email === "" || validateEmail(newData.email) === false){
+      errorList.push("Please enter a valid email")
     }
 
     if(errorList.length < 1){
-      api.put("/courses/" + oldData.id + "/", courseData)
+      api.put("/instructors/" + newData.id + "/", newData)
       .then(res => {
-        // refresh list from remote source
-        refresh()
-
+        const dataUpdate = [...data];
+        const index = oldData.tableData.id;
+        dataUpdate[index] = newData;
+        setData([...dataUpdate]);
         resolve()
         setIserror(false)
         setErrorMessages([])
@@ -145,33 +140,29 @@ function Course({selinstructor}) {
   const handleRowAdd = (newData, resolve) => {
     //validation
     let errorList = []
-    if(newData.code === undefined){
-      errorList.push("Please enter course code")
+    if(newData.first_name === undefined){
+      errorList.push("Please enter first name")
     }
-    if(newData.name === undefined){
-      errorList.push("Please enter course name")
+    if(newData.last_name === undefined){
+      errorList.push("Please enter last name")
     }
-    if(newData.hours === undefined){
-      errorList.push("Please enter course hours per week")
+    if(newData.office === undefined){
+      errorList.push("Please enter office")
     }
-
-    let courseData = {
-      instructor: selinstructor,
-      code: newData.code,
-      name: newData.name,
-      description: 'a',
-      hours: newData.hours,
-      calendar_ref: 'a',
-      grade_breakdown: 'a',
+    if(newData.phone === undefined){
+      errorList.push("Please enter phone number")
+    }
+    if(newData.email === undefined || validateEmail(newData.email) === false){
+      errorList.push("Please enter a valid email")
     }
 
     if(errorList.length < 1){ //no error
-      api.post("/courses/", courseData)
+      console.log(newData)
+      api.post("/instructors/", newData)
       .then(res => {
-
-        // refresh list from remote source
-        refresh()
-
+        let dataToAdd = [...data];
+        dataToAdd.push(newData);
+        setData(dataToAdd);
         resolve()
         setErrorMessages([])
         setIserror(false)
@@ -192,13 +183,12 @@ function Course({selinstructor}) {
 
   const handleRowDelete = (oldData, resolve) => {
     
-    console.log(oldData)
-    api.delete("/courses/" + oldData.id + "/")
+    api.delete("/instructors/" + oldData.id + "/")
       .then(res => {
-
-        // refresh list from remote source
-        refresh()
-        
+        const dataDelete = [...data];
+        const index = oldData.tableData.id;
+        dataDelete.splice(index, 1);
+        setData([...dataDelete]);
         resolve()
       })
       .catch(error => {
@@ -211,7 +201,7 @@ function Course({selinstructor}) {
 
   return (
     
-    <div className="Course">
+    <div className="Instructor">
       <div>
         {iserror && 
           <Alert severity="error">
@@ -226,7 +216,7 @@ function Course({selinstructor}) {
       </h4>
       {isactive &&
         <MaterialTable
-          title="List of Courses"
+          title="List of Instructors"
           columns={columns}
           data={data}
           icons={tableIcons}
@@ -250,20 +240,17 @@ function Course({selinstructor}) {
             selection: true,
             showSelectAllCheckbox: false,
           }}
-          onSelectionChange={(rows) => selectCourse(rows[0])}
+          onSelectionChange={(rows) => selectInstructor(rows[0])}
         />
       }
 
       {!isactive &&
         <div>
-          <LearningOutcome selcourse={selcourse} />
-          <Timetable selcourse={selcourse} />
-          <GradeComponent selcourse={selcourse} />
-          <Textbook selcourse={selcourse} />
+          <Course selinstructor={selinstructor}/>
         </div>
       }
     </div>
   );
 }
 
-export default Course;
+export default Instructor;

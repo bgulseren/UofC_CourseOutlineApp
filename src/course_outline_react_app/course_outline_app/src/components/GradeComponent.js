@@ -1,221 +1,217 @@
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import { forwardRef } from 'react';
 
-import React, { Component } from 'react';
-import axios from 'axios';
-import { FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Table, Button } from 'reactstrap'
+import MaterialTable from "material-table";
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+import axios from 'axios'
+import Alert from '@material-ui/lab/Alert';
 
-class GradeComponent extends Component {
+const tableIcons = {
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+};
 
-    state = {
-        gradeComponents: [],
-        newGradeComponentData: {
-        component: '',
-        learningOutcomes: '',
-        weight: ''
-        },
-        editGradeComponentData: {
-        id: '',
-        component: '',
-        learningOutcomes: '',
-        weight: ''
-        },
-        newGradeComponentModal: false,
-        editGradeComponentModal: false
+const api = axios.create({
+  baseURL: `http://localhost:8000/api`
+})
+
+function GradeComponent({selcourse}) {
+
+  var columns = [
+    {title: "id", field: "id", hidden: true},
+    {title: "course_id", field: "course_id", hidden: true},
+    {title: "Component Type", field: "component"},
+    {title: "Learning Outcomes Evaluated", field: "learningOutcomes"},
+    {title: "Weight", field: "weight"},
+  ]
+  const [data, setData] = useState([]); //table data
+
+  //for error handling
+  const [iserror, setIserror] = useState(false)
+  const [errorMessages, setErrorMessages] = useState([])
+
+  useEffect(() => { 
+    refresh()
+  }, [])
+
+  const refresh = () => {
+    // update data
+    api.get("/gradeComponents?course_id=" + selcourse)
+        .then(res => {               
+            setData(res.data)
+         })
+         .catch(error=>{
+             console.log("Error")
+         })
+  }
+
+  const handleRowUpdate = (newData, oldData, resolve) => {
+    //validation
+    let errorList = []
+    if(newData.component === ""){
+      errorList.push("Please enter grade component type")
+    }
+    if(newData.learningOutcomes === ""){
+      errorList.push("Please enter learning outcomes evaluated with this grade component")
+    }
+    if(newData.weight === ""){
+      errorList.push("Please enter grade component weight percentage")
     }
 
-componentDidMount() {
-  this._refreshGradeComponents();
-}
-
-
-toggleNewGradeComponentModal() {
-    this.setState({
-      newGradeComponentModal: ! this.state.newGradeComponentModal
-    });
-  }
-
-  toggleEditGradeComponentModal() {
-    this.setState({
-      editGradeComponentModal: ! this.state.editGradeComponentModal
-    });
-  }
-
-  addGradeComponent() {
-    axios.post('http://localhost:8000/api/gradeComponents', this.state.newGradeComponentData).then((response) => {
-      let { gradeComponents } = this.state;
-
-      gradeComponents.push(response.data);
-
-      this.setState({ gradeComponents, newGradeComponentModal: false, newGradeComponentData: {
-        component: '',
-        learningOutcomes: '',
-        weight: ''
-      }});
-    });
-  }
-
-  editGradeComponent(id, component, learningOutcomes, weight) {
-    this.setState({
-      editGradeComponentData: { id, component, learningOutcomes, weight }, editGradeComponentModal: ! this.state.editGradeComponentModal
-    });
-  }
-
-  updateGradeComponent() {
-    let { component, learningOutcomes, weight } = this.state.editGradeComponentData;
-
-    axios.put('http://localhost:8000/api/gradeComponents/' + this.state.editGradeComponentData.id, {
-      component, learningOutcomes, weight
-    }).then((response) => {
-      this._refreshGradeComponents();
-
-      this.setState({
-        editGradeComponentModal: false, editGradeComponentData: {
-          component: '',
-          learningOutcomes: '',
-          weight: ''
-        }
+    if(errorList.length < 1){
+      api.put("/gradeComponents/" + newData.id + "/", newData)
+      .then(res => {
+        refresh()
+        resolve()
+        setIserror(false)
+        setErrorMessages([])
       })
-    });
-  }
-
-  deleteGradeComponent(id) {
-    axios.delete('http://localhost:8000/api/gradeComponents/' + id).then((response) => {
-      this._refreshGradeComponents();
-    });
-  }
-
-  _refreshGradeComponents() {
-    axios.get('http://localhost:8000/api/gradeComponents').then((response) => {
-      this.setState({
-        gradeComponents: response.data
-      })
-    });
-  }
-
-  render() {
-    let gradeComponents = this.state.gradeComponents.map((gradeComponent) => {
-      return (
-        <tr key={gradeComponent.id}>
-          <td>{gradeComponent.id}</td>
-          <td>{gradeComponent.component}</td>
-          <td>{gradeComponent.learningOutcomes}</td>
-          <td>{gradeComponent.weight}</td>
-          <td>
-            <Button color="success" size="sm" className="mr-2" onClick={this.editGradeComponent.bind(this, gradeComponent.id, gradeComponent.component, gradeComponent.learningOutcomes, gradeComponent.weight)}>Edit</Button>
-            <Button color="danger" size="sm" onClick={this.deleteGradeComponent.bind(this, gradeComponent.id)}>Delete</Button>
-          </td>
-        </tr>
-      )
-    });
-
-    return (
-    <div>
-
-      <div className="GradeComponent container">
-        <h3>Grade Component</h3>
-
-        <Button className="my-3" color="primary" onClick={this.toggleNewGradeComponentModal.bind(this)}>Add Grade Component</Button>
+      .catch(error => {
+        setErrorMessages(["Update failed! Server error"])
+        setIserror(true)
+        resolve()
         
-        <Modal isOpen={this.state.newGradeComponentModal} toggle={this.toggleNewGradeComponentModal.bind(this)}>
-          <ModalHeader toggle={this.toggleNewGradeComponentModal.bind(this)}>Add</ModalHeader>
-          
-          <ModalBody>
-          <FormGroup>
-              <Label for="gradeComponent">Component</Label>
-              <Input id="gradeComponent" placeholder="ie. assignments, projects" value={this.state.newGradeComponentData.component} onChange={(e) => {
-                let { newGradeComponentData } = this.state;
-                newGradeComponentData.component = e.target.value;
-                this.setState({ newGradeComponentData });
-              }} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="gradeLearningOutcomes">Learning Outcomes</Label>
-              <Input id="gradeLearningOutcomes" placeholder="ie: 1-7" value={this.state.newGradeComponentData.learningOutcomes} onChange={(e) => {
-                let { newGradeComponentData } = this.state;
-                newGradeComponentData.learningOutcomes = e.target.value;
-                this.setState({ newGradeComponentData });
-              }} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="gradeWeight">Weight</Label>
-              <Input id="gradeWeight" placeholder="ie: % 20" value={this.state.newGradeComponentData.weight} onChange={(e) => {
-                let { newGradeComponentData } = this.state;
-                newGradeComponentData.weight = e.target.value;
-                this.setState({ newGradeComponentData });
-              }} />
-            </FormGroup>
-          </ModalBody>
+      })
+    }else{
+      setErrorMessages(errorList)
+      setIserror(true)
+      resolve()
 
-          <ModalFooter>
-            <Button color="primary" onClick={this.addGradeComponent.bind(this)}>Add</Button>{' '}
-            <Button color="secondary" onClick={this.toggleNewGradeComponentModal.bind(this)}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
+    }
+    
+  }
 
-        <Modal isOpen={this.state.editGradeComponentModal} toggle={this.toggleEditGradeComponentModal.bind(this)}>
-          <ModalHeader toggle={this.toggleEditGradeComponentModal.bind(this)}>Edit</ModalHeader>
-          
-          <ModalBody>
-          <FormGroup>
-              <Label for="gradeComponent">Component</Label>
-              <Input id="gradeComponent" placeholder="ie. assignments, projects" value={this.state.editGradeComponentData.component} onChange={(e) => {
-                let { editGradeComponentData } = this.state;
-                editGradeComponentData.component = e.target.value;
-                this.setState({ editGradeComponentData });
-              }} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="gradeLearningOutcomes">Learning Outcomes</Label>
-              <Input id="gradeLearningOutcomes" placeholder="ie: 1-7" value={this.state.editGradeComponentData.learningOutcomes} onChange={(e) => {
-                let { editGradeComponentData } = this.state;
-                editGradeComponentData.learningOutcomes = e.target.value;
-                this.setState({ editGradeComponentData });
-              }} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="gradeWeight">Weight</Label>
-              <Input id="gradeWeight" placeholder="ie: % 20" value={this.state.editGradeComponentData.weight} onChange={(e) => {
-                let { editGradeComponentData } = this.state;
-                editGradeComponentData.weight = e.target.value;
-                this.setState({ editGradeComponentData });
-              }} />
-            </FormGroup>
-          </ModalBody>
+  const handleRowAdd = (newData, resolve) => {
+    //validation
+    let errorList = []
+    if(newData.component === undefined){
+      errorList.push("Please enter grade component type")
+    }
+    if(newData.learningOutcomes === undefined){
+      errorList.push("Please enter learning outcomes evaluated with this grade component")
+    }
+    if(newData.weight === undefined){
+      errorList.push("Please enter grade component weight percentage")
+    }
 
-          <ModalFooter>
-            <Button color="primary" onClick={this.updateGradeComponent.bind(this)}>Update</Button>{' '}
-            <Button color="secondary" onClick={this.toggleEditGradeComponentModal.bind(this)}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
+    let gradeComponentData = {
+      course_id: selcourse,
+      component: newData.component,
+      learningOutcomes: newData.learningOutcomes,
+      weight: newData.weight,
+    }
+
+    if(errorList.length < 1){ //no error
+      api.post("/gradeComponents/", gradeComponentData)
+      .then(res => {
+
+        refresh()
+        resolve()
+        setErrorMessages([])
+        setIserror(false)
+      })
+      .catch(error => {
+        setErrorMessages(["Cannot add data. Server error!"])
+        setIserror(true)
+        resolve()
+      })
+    }else{
+      setErrorMessages(errorList)
+      setIserror(true)
+      resolve()
+    }
+
+    
+  }
+
+  const handleRowDelete = (oldData, resolve) => {
+    
+    api.delete("/gradeComponents/" + oldData.id + "/")
+      .then(res => {
+        refresh()
+
+        resolve()
+      })
+      .catch(error => {
+        setErrorMessages(["Delete failed! Server error"])
+        setIserror(true)
+        resolve()
+      })
+  }
 
 
-        <Table>
-
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Component</th>
-              <th>Learning Outcomes</th>
-              <th>Weight</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {gradeComponents}
-          </tbody>
-
-        </Table>
+  return (
+    
+    <div className="GradeComponent">
+      <div>
+        {iserror && 
+          <Alert severity="error">
+              {errorMessages.map((msg, i) => {
+                  return <div key={i}>{msg}</div>
+              })}
+          </Alert>
+        }       
       </div>
 
+      <MaterialTable
+        title="List of Grade Components"
+        columns={columns}
+        data={data}
+        icons={tableIcons}
+        editable={{
 
-
-
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+                handleRowUpdate(newData, oldData, resolve);
+                
+            }),
+          onRowAdd: (newData) =>
+            new Promise((resolve) => {
+              handleRowAdd(newData, resolve)
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              handleRowDelete(oldData, resolve)
+            }),
+        }}
+        options={{
+          search: false,
+          selection: false,
+          showSelectAllCheckbox: false,
+        }}
+      />
     </div>
-
-
-
-    );
-  }
+  );
 }
 
 export default GradeComponent;

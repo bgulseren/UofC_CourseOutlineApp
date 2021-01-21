@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { forwardRef } from 'react';
 
-import GradeComponent from './GradeComponent'
-import LearningOutcome from './LearningOutcome'
-import Timetable from './Timetable'
-import Textbook from './Textbook'
-
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -50,17 +45,17 @@ const api = axios.create({
   baseURL: `http://localhost:8000/api`
 })
 
-function Course({selinstructor}) {
+function Textbook({selcourse}) {
 
   var columns = [
     {title: "id", field: "id", hidden: true},
-    {title: "Instructor", field: "instructor", hidden: true},
-    {title: "Course code", field: "code"},
-    {title: "Course name", field: "name"},
-    {title: "Description", field: "description", hidden: true},
-    {title: "Hours", field: "hours"},
-    {title: "Calendar Reference", field: "calendar_ref", hidden: true},
-    {title: "Grade Breakdown", field: "grade_breakdown", hidden: true},
+    {title: "course_id", field: "course_id", hidden: true},
+    {title: "Title", field: "title"},
+    {title: "Author(s)", field: "authors"},
+    {title: "Edition", field: "edition"},
+    {title: "Year", field: "year"},
+    {title: "Publisher", field: "publisher"},
+    {title: "Recommended?", field: "is_recommended"}
   ]
   const [data, setData] = useState([]); //table data
 
@@ -68,24 +63,13 @@ function Course({selinstructor}) {
   const [iserror, setIserror] = useState(false)
   const [errorMessages, setErrorMessages] = useState([])
 
-  const [isactive, setIsactive] = useState(true);
-  const [selcourse, setSelcourse] = useState(-1);
-
-  const [headermessage, setHeadermessage] = useState("Select a course from the list");
-
   useEffect(() => { 
     refresh()
   }, [])
 
-  const selectCourse = (course) => {
-    setIsactive(false)
-    setHeadermessage("Selected course: " + course.code + " - " + course.name)
-    setSelcourse(course.id)
-  }
-
   const refresh = () => {
     // update data
-    api.get("/courses/?instructor=" + selinstructor)
+    api.get("/textbooks?course_id=" + selcourse)
         .then(res => {               
             setData(res.data)
          })
@@ -97,32 +81,29 @@ function Course({selinstructor}) {
   const handleRowUpdate = (newData, oldData, resolve) => {
     //validation
     let errorList = []
-    if(newData.code === ""){
-      errorList.push("Please enter course code")
+    if(newData.title === ""){
+      errorList.push("Please enter title")
     }
-    if(newData.name === ""){
-      errorList.push("Please enter course name")
+    if(newData.authors === ""){
+      errorList.push("Please enter at least an author")
     }
-    if(newData.hours === ""){
-      errorList.push("Please enter course hours per week")
+    if(newData.edition === ""){
+      errorList.push("Please enter the edition")
     }
-
-    let courseData = {
-      instructor: selinstructor,
-      code: newData.code,
-      name: newData.name,
-      description: newData.description,
-      hours: newData.hours,
-      calendar_ref: newData.calendar_ref,
-      grade_breakdown: newData.grade_breakdown,
+    if(newData.year === ""){
+      errorList.push("Please enter year")
+    }
+    if(newData.publisher === ""){
+      errorList.push("Please enter publisher")
+    }
+    if(newData.is_recommended === ""){
+      errorList.push("Please enter recommended")
     }
 
     if(errorList.length < 1){
-      api.put("/courses/" + oldData.id + "/", courseData)
+      api.put("/textbooks/" + newData.id, newData)
       .then(res => {
-        // refresh list from remote source
         refresh()
-
         resolve()
         setIserror(false)
         setErrorMessages([])
@@ -145,33 +126,40 @@ function Course({selinstructor}) {
   const handleRowAdd = (newData, resolve) => {
     //validation
     let errorList = []
-    if(newData.code === undefined){
-      errorList.push("Please enter course code")
+    if(newData.title === undefined){
+      errorList.push("Please enter title")
     }
-    if(newData.name === undefined){
-      errorList.push("Please enter course name")
+    if(newData.authors === undefined){
+      errorList.push("Please enter at least an author")
     }
-    if(newData.hours === undefined){
-      errorList.push("Please enter course hours per week")
+    if(newData.edition === undefined){
+      errorList.push("Please enter the edition")
+    }
+    if(newData.year === undefined){
+      errorList.push("Please enter year")
+    }
+    if(newData.publisher === undefined){
+      errorList.push("Please enter publisher")
+    }
+    if(newData.is_recommended === undefined){
+      errorList.push("Please enter recommended")
     }
 
-    let courseData = {
-      instructor: selinstructor,
-      code: newData.code,
-      name: newData.name,
-      description: 'a',
-      hours: newData.hours,
-      calendar_ref: 'a',
-      grade_breakdown: 'a',
+    let textbookData = {
+      course_id: selcourse,
+      title: newData.title,
+      authors: newData.authors,
+      edition: newData.edition,
+      year: newData.year,
+      publisher: newData.publisher,
+      is_recommended: newData.is_recommended,
     }
 
     if(errorList.length < 1){ //no error
-      api.post("/courses/", courseData)
+      api.post("/textbooks", textbookData)
       .then(res => {
 
-        // refresh list from remote source
         refresh()
-
         resolve()
         setErrorMessages([])
         setIserror(false)
@@ -192,13 +180,10 @@ function Course({selinstructor}) {
 
   const handleRowDelete = (oldData, resolve) => {
     
-    console.log(oldData)
-    api.delete("/courses/" + oldData.id + "/")
+    api.delete("/textbooks/" + oldData.id)
       .then(res => {
-
-        // refresh list from remote source
         refresh()
-        
+
         resolve()
       })
       .catch(error => {
@@ -211,7 +196,7 @@ function Course({selinstructor}) {
 
   return (
     
-    <div className="Course">
+    <div className="Textbook">
       <div>
         {iserror && 
           <Alert severity="error">
@@ -221,49 +206,36 @@ function Course({selinstructor}) {
           </Alert>
         }       
       </div>
-      <h4>
-        {headermessage}
-      </h4>
-      {isactive &&
-        <MaterialTable
-          title="List of Courses"
-          columns={columns}
-          data={data}
-          icons={tableIcons}
-          editable={{
 
-            onRowUpdate: (newData, oldData) =>
-              new Promise((resolve) => {
-                  handleRowUpdate(newData, oldData, resolve);
-                  
-              }),
-            onRowAdd: (newData) =>
-              new Promise((resolve) => {
-                handleRowAdd(newData, resolve)
-              }),
-            onRowDelete: (oldData) =>
-              new Promise((resolve) => {
-                handleRowDelete(oldData, resolve)
-              }),
-          }}
-          options={{
-            selection: true,
-            showSelectAllCheckbox: false,
-          }}
-          onSelectionChange={(rows) => selectCourse(rows[0])}
-        />
-      }
+      <MaterialTable
+        title="List of Textbooks"
+        columns={columns}
+        data={data}
+        icons={tableIcons}
+        editable={{
 
-      {!isactive &&
-        <div>
-          <LearningOutcome selcourse={selcourse} />
-          <Timetable selcourse={selcourse} />
-          <GradeComponent selcourse={selcourse} />
-          <Textbook selcourse={selcourse} />
-        </div>
-      }
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+                handleRowUpdate(newData, oldData, resolve);
+                
+            }),
+          onRowAdd: (newData) =>
+            new Promise((resolve) => {
+              handleRowAdd(newData, resolve)
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              handleRowDelete(oldData, resolve)
+            }),
+        }}
+        options={{
+          search: false,
+          selection: false,
+          showSelectAllCheckbox: false,
+        }}
+      />
     </div>
   );
 }
 
-export default Course;
+export default Textbook;

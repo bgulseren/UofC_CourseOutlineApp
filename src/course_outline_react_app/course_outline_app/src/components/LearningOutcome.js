@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { forwardRef } from 'react';
 
-import GradeComponent from './GradeComponent'
-import LearningOutcome from './LearningOutcome'
-import Timetable from './Timetable'
-import Textbook from './Textbook'
-
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -50,17 +45,14 @@ const api = axios.create({
   baseURL: `http://localhost:8000/api`
 })
 
-function Course({selinstructor}) {
+function LearningOutcome({selcourse}) {
 
   var columns = [
     {title: "id", field: "id", hidden: true},
-    {title: "Instructor", field: "instructor", hidden: true},
-    {title: "Course code", field: "code"},
-    {title: "Course name", field: "name"},
-    {title: "Description", field: "description", hidden: true},
-    {title: "Hours", field: "hours"},
-    {title: "Calendar Reference", field: "calendar_ref", hidden: true},
-    {title: "Grade Breakdown", field: "grade_breakdown", hidden: true},
+    {title: "course_id", field: "course_id", hidden: true},
+    {title: "Description", field: "description"},
+    {title: "Graduate Attribute", field: "gradAttribute"},
+    {title: "Instruction Level", field: "instLevel"},
   ]
   const [data, setData] = useState([]); //table data
 
@@ -68,24 +60,13 @@ function Course({selinstructor}) {
   const [iserror, setIserror] = useState(false)
   const [errorMessages, setErrorMessages] = useState([])
 
-  const [isactive, setIsactive] = useState(true);
-  const [selcourse, setSelcourse] = useState(-1);
-
-  const [headermessage, setHeadermessage] = useState("Select a course from the list");
-
   useEffect(() => { 
     refresh()
   }, [])
 
-  const selectCourse = (course) => {
-    setIsactive(false)
-    setHeadermessage("Selected course: " + course.code + " - " + course.name)
-    setSelcourse(course.id)
-  }
-
   const refresh = () => {
     // update data
-    api.get("/courses/?instructor=" + selinstructor)
+    api.get("/learningOutcomes?course_id=" + selcourse)
         .then(res => {               
             setData(res.data)
          })
@@ -97,32 +78,20 @@ function Course({selinstructor}) {
   const handleRowUpdate = (newData, oldData, resolve) => {
     //validation
     let errorList = []
-    if(newData.code === ""){
-      errorList.push("Please enter course code")
+    if(newData.description === ""){
+      errorList.push("Please enter description")
     }
-    if(newData.name === ""){
-      errorList.push("Please enter course name")
+    if(newData.gradAttribute === ""){
+      errorList.push("Please enter graduate attribute")
     }
-    if(newData.hours === ""){
-      errorList.push("Please enter course hours per week")
-    }
-
-    let courseData = {
-      instructor: selinstructor,
-      code: newData.code,
-      name: newData.name,
-      description: newData.description,
-      hours: newData.hours,
-      calendar_ref: newData.calendar_ref,
-      grade_breakdown: newData.grade_breakdown,
+    if(newData.instLevel === ""){
+      errorList.push("Please enter instruction level")
     }
 
     if(errorList.length < 1){
-      api.put("/courses/" + oldData.id + "/", courseData)
+      api.put("/learningOutcomes/" + newData.id, newData)
       .then(res => {
-        // refresh list from remote source
         refresh()
-
         resolve()
         setIserror(false)
         setErrorMessages([])
@@ -145,33 +114,28 @@ function Course({selinstructor}) {
   const handleRowAdd = (newData, resolve) => {
     //validation
     let errorList = []
-    if(newData.code === undefined){
-      errorList.push("Please enter course code")
+    if(newData.description === undefined){
+      errorList.push("Please enter description")
     }
-    if(newData.name === undefined){
-      errorList.push("Please enter course name")
+    if(newData.gradAttribute === undefined){
+      errorList.push("Please enter graduate attribute")
     }
-    if(newData.hours === undefined){
-      errorList.push("Please enter course hours per week")
+    if(newData.instLevel === undefined){
+      errorList.push("Please enter instruction level")
     }
 
-    let courseData = {
-      instructor: selinstructor,
-      code: newData.code,
-      name: newData.name,
-      description: 'a',
-      hours: newData.hours,
-      calendar_ref: 'a',
-      grade_breakdown: 'a',
+    let learningOutcomeData = {
+      course_id: selcourse,
+      description: newData.description,
+      gradAttribute: newData.gradAttribute,
+      instLevel: newData.instLevel,
     }
 
     if(errorList.length < 1){ //no error
-      api.post("/courses/", courseData)
+      api.post("/learningOutcomes", learningOutcomeData)
       .then(res => {
 
-        // refresh list from remote source
         refresh()
-
         resolve()
         setErrorMessages([])
         setIserror(false)
@@ -192,13 +156,10 @@ function Course({selinstructor}) {
 
   const handleRowDelete = (oldData, resolve) => {
     
-    console.log(oldData)
-    api.delete("/courses/" + oldData.id + "/")
+    api.delete("/learningOutcomes/" + oldData.id)
       .then(res => {
-
-        // refresh list from remote source
         refresh()
-        
+
         resolve()
       })
       .catch(error => {
@@ -211,7 +172,7 @@ function Course({selinstructor}) {
 
   return (
     
-    <div className="Course">
+    <div className="LearningOutcome">
       <div>
         {iserror && 
           <Alert severity="error">
@@ -221,49 +182,36 @@ function Course({selinstructor}) {
           </Alert>
         }       
       </div>
-      <h4>
-        {headermessage}
-      </h4>
-      {isactive &&
-        <MaterialTable
-          title="List of Courses"
-          columns={columns}
-          data={data}
-          icons={tableIcons}
-          editable={{
 
-            onRowUpdate: (newData, oldData) =>
-              new Promise((resolve) => {
-                  handleRowUpdate(newData, oldData, resolve);
-                  
-              }),
-            onRowAdd: (newData) =>
-              new Promise((resolve) => {
-                handleRowAdd(newData, resolve)
-              }),
-            onRowDelete: (oldData) =>
-              new Promise((resolve) => {
-                handleRowDelete(oldData, resolve)
-              }),
-          }}
-          options={{
-            selection: true,
-            showSelectAllCheckbox: false,
-          }}
-          onSelectionChange={(rows) => selectCourse(rows[0])}
-        />
-      }
+      <MaterialTable
+        title="List of Learning Outcomes"
+        columns={columns}
+        data={data}
+        icons={tableIcons}
+        editable={{
 
-      {!isactive &&
-        <div>
-          <LearningOutcome selcourse={selcourse} />
-          <Timetable selcourse={selcourse} />
-          <GradeComponent selcourse={selcourse} />
-          <Textbook selcourse={selcourse} />
-        </div>
-      }
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+                handleRowUpdate(newData, oldData, resolve);
+                
+            }),
+          onRowAdd: (newData) =>
+            new Promise((resolve) => {
+              handleRowAdd(newData, resolve)
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              handleRowDelete(oldData, resolve)
+            }),
+        }}
+        options={{
+          search: false,
+          selection: false,
+          showSelectAllCheckbox: false,
+        }}
+      />
     </div>
   );
 }
 
-export default Course;
+export default LearningOutcome;
