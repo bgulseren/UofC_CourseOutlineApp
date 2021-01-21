@@ -42,7 +42,6 @@ class InstructorViewSet(viewsets.ModelViewSet):
     serializer_class = InstructorSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['phone', 'first_name']
 
 class CourseViewSet(viewsets.ModelViewSet): 
     queryset = Course.objects.all()
@@ -56,14 +55,14 @@ class LearningOutcomeViewSet(viewsets.ModelViewSet):
     serializer_class = LearningOutcomeSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('course_id')
+    filterset_fields = ['course_id']
 
 class TimetableViewSet(viewsets.ModelViewSet): 
     queryset = Timetable.objects.all()
     serializer_class = TimetableSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('course_id')
+    filterset_fields = ['course_id']
 
 
 class GradeComponentViewSet(viewsets.ModelViewSet): 
@@ -71,11 +70,11 @@ class GradeComponentViewSet(viewsets.ModelViewSet):
     serializer_class = GradeComponentSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('course_id')
+    filterset_fields = ['course_id']
 
 class TextbookViewSet(viewsets.ModelViewSet): 
     queryset = Textbook.objects.all()
     serializer_class = TextbookSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('course_id')
+    filterset_fields = ['course_id']
