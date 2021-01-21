@@ -1,0 +1,26 @@
+React UI Requirements:
+1. Course information text area
+	- requires editable text area where instructor can enter course information text
+	- requires functionality to attache a hyperlink for calender reference
+2. Learning ourcomes text area
+	- used only to display learning outcomes entered by instructor
+3. Add learning outcome button
+	- button click creates pop-up where instroctor can add a learning outcome and save it
+	- this learning outcome should be displayed in the learning outcomes text area
+4. Delete learning outcome button
+	- select a learning outcome from the learning outcomes text area to delete
+	- button click should remove the selected learning outcome from the learning outcomes text area
+5. Final grade breakdown text area
+	- used to display final grade components
+6. Add grade component button
+	- button click creates pop-up where instructor can add a grade component
+	- in the popup, instructor will type in component name, select the learning outcome(s) from a dropdown and type in percentage
+		- learning outcomes dropdown generated from learning outcomes entered in steps 2-5
+		- layout: component name, learning outcome, percentage
+7. Delete grade component button
+	- select a grade component from Final grade breakdown text area to delete
+	- button click should remove selection from the text area
+8. Total grade percentatge text area
+	- text area to display calculated total percentage from all entered grade components
+	- color should be green when sum is 100%
+	- color should be red when sum is < 100%
