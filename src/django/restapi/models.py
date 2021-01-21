@@ -67,6 +67,6 @@ class Textbook(models.Model):
     edition = models.TextField(blank=False, null=True)
     year = models.IntegerField(blank=False, null=True)
     publisher = models.TextField(blank=False, null=True)
-    is_recommended = models.BooleanField(blank=False, null=True)
+    is_recommended = models.TextField(blank=False, null=True)
     # def __str__(self):
     #     return self.message

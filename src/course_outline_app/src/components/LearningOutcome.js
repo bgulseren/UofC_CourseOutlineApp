@@ -89,7 +89,7 @@ function LearningOutcome({selcourse}) {
     }
 
     if(errorList.length < 1){
-      api.put("/learningOutcomes/" + newData.id, newData)
+      api.put("/learningOutcomes/" + newData.id + "/", newData)
       .then(res => {
         refresh()
         resolve()
@@ -132,7 +132,7 @@ function LearningOutcome({selcourse}) {
     }
 
     if(errorList.length < 1){ //no error
-      api.post("/learningOutcomes", learningOutcomeData)
+      api.post("/learningOutcomes/", learningOutcomeData)
       .then(res => {
 
         refresh()
@@ -156,7 +156,7 @@ function LearningOutcome({selcourse}) {
 
   const handleRowDelete = (oldData, resolve) => {
     
-    api.delete("/learningOutcomes/" + oldData.id)
+    api.delete("/learningOutcomes/" + oldData.id + "/")
       .then(res => {
         refresh()
 

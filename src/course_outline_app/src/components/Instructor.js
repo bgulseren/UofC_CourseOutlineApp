@@ -77,7 +77,7 @@ function Instructor() {
   const [headermessage, setHeadermessage] = useState("Select an instructor from the list");
 
   useEffect(() => { 
-    api.get("/instructors")
+    api.get("/instructors/")
         .then(res => {               
             setData(res.data)
          })

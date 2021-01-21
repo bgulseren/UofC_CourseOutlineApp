@@ -109,7 +109,7 @@ function Timetable({selcourse}) {
     }
 
     if(errorList.length < 1){
-      api.put("/timetables/" + newData.id, newData)
+      api.put("/timetables/" + newData.id + "/", newData)
       .then(res => {
         refresh()
         resolve()
@@ -161,13 +161,18 @@ function Timetable({selcourse}) {
 
     let timetableData = {
       course_id: selcourse,
-      component: newData.component,
-      learningOutcomes: newData.learningOutcomes,
-      weight: newData.weight,
+      instructor_type: newData.instructor_type,
+      section: newData.section,
+      section_type: newData.section_type,
+      days: newData.days,
+      time: newData.time,
+      location: newData.location,
+      hoursPerWeek: newData.hoursPerWeek,
+      studentsPerInstructor: newData.studentsPerInstructor,
     }
 
     if(errorList.length < 1){ //no error
-      api.post("/timetables", timetableData)
+      api.post("/timetables/", timetableData)
       .then(res => {
 
         refresh()
@@ -191,7 +196,7 @@ function Timetable({selcourse}) {
 
   const handleRowDelete = (oldData, resolve) => {
     
-    api.delete("/timetables/" + oldData.id)
+    api.delete("/timetables/" + oldData.id + "/")
       .then(res => {
         refresh()
 

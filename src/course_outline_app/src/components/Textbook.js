@@ -55,7 +55,7 @@ function Textbook({selcourse}) {
     {title: "Edition", field: "edition"},
     {title: "Year", field: "year"},
     {title: "Publisher", field: "publisher"},
-    {title: "Recommended?", field: "is_recommended"}
+    {title: "Recommended?", field: "is_recommended"},
   ]
   const [data, setData] = useState([]); //table data
 
@@ -101,7 +101,7 @@ function Textbook({selcourse}) {
     }
 
     if(errorList.length < 1){
-      api.put("/textbooks/" + newData.id, newData)
+      api.put("/textbooks/" + newData.id + "/", newData)
       .then(res => {
         refresh()
         resolve()
@@ -156,7 +156,7 @@ function Textbook({selcourse}) {
     }
 
     if(errorList.length < 1){ //no error
-      api.post("/textbooks", textbookData)
+      api.post("/textbooks/", textbookData)
       .then(res => {
 
         refresh()
@@ -180,7 +180,7 @@ function Textbook({selcourse}) {
 
   const handleRowDelete = (oldData, resolve) => {
     
-    api.delete("/textbooks/" + oldData.id)
+    api.delete("/textbooks/" + oldData.id + "/")
       .then(res => {
         refresh()
 

@@ -29,8 +29,8 @@ router.register(r'api/instructors', views.InstructorViewSet)
 router.register(r'api/courses', views.CourseViewSet)
 router.register(r'api/learningOutcomes', views.LearningOutcomeViewSet)
 router.register(r'api/timetables', views.TimetableViewSet)
-router.register(r'api/gradecomponents', views.GradeComponentViewSet)
-router.register(r'api/textbooks', views.InstructorViewSet) 
+router.register(r'api/gradeComponents', views.GradeComponentViewSet)
+router.register(r'api/textbooks', views.TextbookViewSet) 
 
 urlpatterns = [
     # url(r'^', include('restapi.urls')),
