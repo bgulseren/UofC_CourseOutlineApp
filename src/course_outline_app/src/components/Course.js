@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { forwardRef } from 'react';
 
+import CourseDetail from './CourseDetail'
 import GradeComponent from './GradeComponent'
 import LearningOutcome from './LearningOutcome'
 import Timetable from './Timetable'
@@ -256,6 +257,7 @@ function Course({selinstructor}) {
 
       {!isactive &&
         <div>
+          <CourseDetail selcourse={selcourse} />
           <LearningOutcome selcourse={selcourse} />
           <Timetable selcourse={selcourse} />
           <GradeComponent selcourse={selcourse} />
