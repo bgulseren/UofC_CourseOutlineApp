@@ -50,4 +50,10 @@ class TextbookSerializer(serializers.ModelSerializer):
     # specify model and fields 
     class Meta: 
         model = Textbook
-        fields = ['id', 'course_id', 'title', 'authors', 'edition', 'year', 'publisher', 'is_recommended'] 
+        fields = ['id', 'course_id', 'title', 'authors', 'edition', 'year', 'publisher', 'is_recommended']
+
+class GradeBreakdownSerializer(serializers.ModelSerializer): 
+    # specify model and fields 
+    class Meta: 
+        model = GradeBreakdown
+        fields = ['id', 'course_id', 'ap', 'an', 'am', 'bp', 'bn', 'bm', 'cp', 'cn', 'cm', 'dp', 'dn' ] 

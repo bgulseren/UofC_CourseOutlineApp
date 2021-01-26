@@ -70,3 +70,20 @@ class Textbook(models.Model):
     is_recommended = models.TextField(blank=False, null=True)
     # def __str__(self):
     #     return self.message
+
+class GradeBreakdown(models.Model):
+    id = models.AutoField(primary_key=True, blank=True, null=False)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
+    ap = models.IntegerField(blank=False, null=True)
+    an = models.IntegerField(blank=False, null=True)
+    am = models.IntegerField(blank=False, null=True)
+    bp = models.IntegerField(blank=False, null=True)
+    bn = models.IntegerField(blank=False, null=True)
+    bm = models.IntegerField(blank=False, null=True)
+    cp = models.IntegerField(blank=False, null=True)
+    cn = models.IntegerField(blank=False, null=True)
+    cm = models.IntegerField(blank=False, null=True)
+    dp = models.IntegerField(blank=False, null=True)
+    dn = models.IntegerField(blank=False, null=True)
+    # def __str__(self):
+    #     return self.message

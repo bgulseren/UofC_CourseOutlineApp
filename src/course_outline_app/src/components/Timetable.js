@@ -248,6 +248,7 @@ function Timetable({selcourse}) {
           search: false,
           selection: false,
           showSelectAllCheckbox: false,
+          showTitle: false,
         }}
       />
     </div>

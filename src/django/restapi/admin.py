@@ -8,5 +8,6 @@ admin.site.register(LearningOutcome)
 admin.site.register(Timetable)
 admin.site.register(GradeComponent)
 admin.site.register(Textbook)
+admin.site.register(GradeBreakdown)
 
 # Register your models here.

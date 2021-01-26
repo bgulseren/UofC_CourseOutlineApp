@@ -19,7 +19,7 @@ function App() {
           </div>
 
           <Typography component="div" style={{height: '100vh' }}>
-
+            <p></p>
             <Instructor />
           </Typography>
         </Container>

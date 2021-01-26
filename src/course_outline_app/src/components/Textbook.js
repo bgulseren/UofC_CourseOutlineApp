@@ -232,6 +232,7 @@ function Textbook({selcourse}) {
           search: false,
           selection: false,
           showSelectAllCheckbox: false,
+          showTitle: false,
         }}
       />
     </div>

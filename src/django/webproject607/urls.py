@@ -30,7 +30,8 @@ router.register(r'api/courses', views.CourseViewSet)
 router.register(r'api/learningOutcomes', views.LearningOutcomeViewSet)
 router.register(r'api/timetables', views.TimetableViewSet)
 router.register(r'api/gradeComponents', views.GradeComponentViewSet)
-router.register(r'api/textbooks', views.TextbookViewSet) 
+router.register(r'api/textbooks', views.TextbookViewSet)
+router.register(r'api/gradeBreakdowns', views.GradeBreakdownViewSet) 
 
 urlpatterns = [
     # url(r'^', include('restapi.urls')),

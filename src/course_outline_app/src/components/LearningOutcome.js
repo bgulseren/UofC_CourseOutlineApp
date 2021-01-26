@@ -208,6 +208,7 @@ function LearningOutcome({selcourse}) {
           search: false,
           selection: false,
           showSelectAllCheckbox: false,
+          showTitle: false,
         }}
       />
     </div>

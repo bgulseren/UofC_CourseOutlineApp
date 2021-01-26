@@ -66,3 +66,10 @@ class TextbookViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['course_id']
+
+class GradeBreakdownViewSet(viewsets.ModelViewSet): 
+    queryset = GradeBreakdown.objects.all()
+    serializer_class = GradeBreakdownSerializer
+    permission_classes = [permissions.AllowAny]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['course_id']
