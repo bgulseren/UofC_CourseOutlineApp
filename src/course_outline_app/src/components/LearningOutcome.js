@@ -51,8 +51,35 @@ function LearningOutcome({selcourse}) {
     {title: "id", field: "id", hidden: true},
     {title: "course_id", field: "course_id", hidden: true},
     {title: "Description", field: "description"},
-    {title: "Graduate Attribute", field: "gradAttribute"},
-    {title: "Instruction Level", field: "instLevel"},
+    {
+      title: "Graduate Attribute",
+      field: "gradAttribute",
+      lookup:
+       {
+         1:"A1. A knowledge base for engineering",
+         2:"A2. Problem analysis",
+         3:"A3. Investigation",
+         4:"A4. Design",
+         5:"A5. Use of enigeineering tools",
+         6:"A6. Individual and team work",
+         7:"A7. Communication skills",
+         8:"A8. Professionalism",
+         9:"A9. Impact of engineering on society/environment",
+         10:"A10. Ethics and equality",
+         11:"A11. Economics and project management",
+         12:"A12. Life-long learning"
+       } 
+    },
+    {
+      title: "Instruction Level",
+      field: "instLevel",
+      lookup:
+       {
+         1:"A (Applied)",
+         2:"I (Introduced)",
+         3:"D (Developed)"
+       } 
+    }
   ]
   const [data, setData] = useState([]); //table data
 
