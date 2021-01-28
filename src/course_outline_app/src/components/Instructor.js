@@ -90,9 +90,15 @@ function Instructor() {
   const [isactive, setIsactive] = useState(true)
   const [selinstructor, setSelinstructor] = useState(-1)
 
-  const [headermessage, setHeadermessage] = useState('Select an instructor')
+  const [headermessage, setHeadermessage] = useState(
+    'Select an instructor or add a new one if not existing...'
+  )
 
   useEffect(() => {
+    refresh()
+  }, [])
+
+  const refresh = () => {
     api
       .get('/instructors/')
       .then((res) => {
@@ -101,12 +107,12 @@ function Instructor() {
       .catch((error) => {
         console.log('Error')
       })
-  }, [])
+  }
 
   const selectInstructor = (instructor) => {
     setIsactive(false)
     setHeadermessage(
-      'List of courses for ' +
+      'Selected Instructor: ' +
         instructor.first_name +
         ' ' +
         instructor.last_name
@@ -137,10 +143,7 @@ function Instructor() {
       api
         .put('/instructors/' + newData.id + '/', newData)
         .then((res) => {
-          const dataUpdate = [...data]
-          const index = oldData.tableData.id
-          dataUpdate[index] = newData
-          setData([...dataUpdate])
+          refresh()
           resolve()
           setIserror(false)
           setErrorMessages([])
@@ -182,9 +185,7 @@ function Instructor() {
       api
         .post('/instructors/', newData)
         .then((res) => {
-          let dataToAdd = [...data]
-          dataToAdd.push(newData)
-          setData(dataToAdd)
+          refresh()
           resolve()
           setErrorMessages([])
           setIserror(false)
@@ -205,10 +206,7 @@ function Instructor() {
     api
       .delete('/instructors/' + oldData.id + '/')
       .then((res) => {
-        const dataDelete = [...data]
-        const index = oldData.tableData.id
-        dataDelete.splice(index, 1)
-        setData([...dataDelete])
+        refresh()
         resolve()
       })
       .catch((error) => {
