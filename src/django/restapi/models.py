@@ -19,7 +19,9 @@ class Course(models.Model):
     description = models.TextField(blank=False, null=True)
     hours = models.TextField(blank=False, null=True)
     calendar_ref = models.TextField(blank=False, null=True)
-    grade_breakdown = models.TextField(blank=False, null=True)
+    exam_policy = models.TextField(blank=False, null=True)
+    calc_policy = models.TextField(blank=False, null=True)
+    course_policy = models.TextField(blank=False, null=True)
 
     # def __str__(self):
     #     return self.message
