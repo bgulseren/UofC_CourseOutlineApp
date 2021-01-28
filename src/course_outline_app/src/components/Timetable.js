@@ -50,15 +50,46 @@ function Timetable({selcourse}) {
   var columns = [
     {title: "id", field: "id", hidden: true},
     {title: "course_id", field: "course_id", hidden: true},
-    {title: "Instructor Type", field: "instructor_type"},
+    {
+      title: "Instructor Type",
+      field: "instructor_type",
+      lookup:
+       {
+         1:"Instructor",
+         2:"TA",
+         3:"Course Coordinator",
+       } 
+    },
     {title: "Section", field: "section"},
-    {title: "Section Type", field: "section_type"},
-    {title: "Days", field: "days"},
-    {title: "Time", field: "time"},
+    {
+      title: "Section Type",
+      field: "section_type",
+      lookup:
+       {
+         1:"Lecture",
+         2:"Tutorial",
+         3:"Lab",
+       } 
+    },
+    {
+      title: "Days",
+      field: "days",
+      lookup:
+       {
+         1:"Monday",
+         2:"Tuesday",
+         3:"Wednesday",
+         4:"Thursday",
+         5:"Friday"
+       } 
+    },
+    {title: "Time", field: "time", type:'number'},
+    {title: "End Time", field: "end_time", type:'number'},
     {title: "Location", field: "location"},
     {title: "Hours Per Week", field: "hoursPerWeek"},
     {title: "Students per Instructor", field: "studentsPerInstructor"}
   ]
+
   const [data, setData] = useState([]); //table data
 
   //for error handling
@@ -81,6 +112,8 @@ function Timetable({selcourse}) {
   }
 
   const handleRowUpdate = (newData, oldData, resolve) => {
+    var regExp = /^[0-9]*[.]?[0-9]*$/;
+
     //validation
     let errorList = []
     if(newData.instructor_type === ""){
@@ -107,6 +140,12 @@ function Timetable({selcourse}) {
     if(newData.studentsPerInstructor === ""){
       errorList.push("Please enter students per instructor")
     }
+    if(newData.hoursPerWeek !== "" && !regExp.test(newData.hoursPerWeek)){
+      errorList.push("Error in Hours Per Week - Enter integers only")
+    }
+    if(newData.studentsPerInstructor !== "" && !regExp.test(newData.studentsPerInstructor)){
+      errorList.push("Error in Students Per Instructor - Enter integers only")
+    }
 
     if(errorList.length < 1){
       api.put("/timetables/" + newData.id + "/", newData)
@@ -132,6 +171,8 @@ function Timetable({selcourse}) {
   }
 
   const handleRowAdd = (newData, resolve) => {
+    var regExp = /^[0-9]*[.]?[0-9]*$/;
+
     //validation
     let errorList = []
     if(newData.instructor_type === undefined){
@@ -157,6 +198,12 @@ function Timetable({selcourse}) {
     }
     if(newData.studentsPerInstructor === undefined){
       errorList.push("Please enter students per instructor")
+    }
+    if(newData.hoursPerWeek !== undefined && !regExp.test(newData.hoursPerWeek)){
+      errorList.push("Error in Hours Per Week - Enter integers only")
+    }
+    if(newData.studentsPerInstructor !== undefined && !regExp.test(newData.studentsPerInstructor)){
+      errorList.push("Error in Students Per Instructor - Enter integers only")
     }
 
     let timetableData = {
