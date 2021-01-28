@@ -1,0 +1,2 @@
+- Look into font awesome for delete/add type of button icons
+- Look into bulma tables
