@@ -50,15 +50,120 @@ function Timetable({selcourse}) {
   var columns = [
     {title: "id", field: "id", hidden: true},
     {title: "course_id", field: "course_id", hidden: true},
-    {title: "Instructor Type", field: "instructor_type"},
+    {
+      title: "Instructor Type",
+      field: "instructor_type",
+      lookup:
+       {
+         1:"Instructor",
+         2:"TA",
+         3:"Course Coordinator",
+       } 
+    },
     {title: "Section", field: "section"},
-    {title: "Section Type", field: "section_type"},
-    {title: "Days", field: "days"},
-    {title: "Time", field: "time"},
+    {
+      title: "Section Type",
+      field: "section_type",
+      lookup:
+       {
+         1:"Lecture",
+         2:"Tutorial",
+         3:"Lab",
+       } 
+    },
+    {
+      title: "Day 1",
+      field: "day1",
+      lookup:
+       {
+         1:"Monday",
+         2:"Tuesday",
+         3:"Wednesday",
+         4:"Thursday",
+         5:"Friday"
+       } 
+    },
+    {
+      title: "Day 2",
+      field: "day2",
+      lookup:
+       {
+         1:"Monday",
+         2:"Tuesday",
+         3:"Wednesday",
+         4:"Thursday",
+         5:"Friday"
+       } 
+    },
+    {
+      title: "Start Time",
+      field: "start_time",
+      lookup:
+       {
+         1:"8:00",
+         2:"8:30",
+         3:"9:00",
+         4:"9:30",
+         5:"10:00",
+         6:"10:30",
+         7:"11:00",
+         8:"11:30",
+         9:"12:00",
+         10:"12:30",
+         11:"13:00",
+         12:"13:30",
+         13:"14:00",
+         14:"14:30",
+         15:"15:00",
+         16:"15:30",
+         17:"16:00",
+         18:"16:30",
+         19:"17:00",
+         20:"17:30",
+         21:"18:00",
+         22:"18:30",
+         23:"19:00",
+         24:"19:30",
+         25:"20:00",
+       } 
+    },
+    {
+      title: "End Time",
+      field: "end_time",
+      lookup:
+       {
+         1:"8:00",
+         2:"8:30",
+         3:"9:00",
+         4:"9:30",
+         5:"10:00",
+         6:"10:30",
+         7:"11:00",
+         8:"11:30",
+         9:"12:00",
+         10:"12:30",
+         11:"13:00",
+         12:"13:30",
+         13:"14:00",
+         14:"14:30",
+         15:"15:00",
+         16:"15:30",
+         17:"16:00",
+         18:"16:30",
+         19:"17:00",
+         20:"17:30",
+         21:"18:00",
+         22:"18:30",
+         23:"19:00",
+         24:"19:30",
+         25:"20:00",
+       } 
+    },
     {title: "Location", field: "location"},
     {title: "Hours Per Week", field: "hoursPerWeek"},
     {title: "Students per Instructor", field: "studentsPerInstructor"}
   ]
+
   const [data, setData] = useState([]); //table data
 
   //for error handling
@@ -81,6 +186,8 @@ function Timetable({selcourse}) {
   }
 
   const handleRowUpdate = (newData, oldData, resolve) => {
+    var regExp = /^[0-9]*[.]?[0-9]*$/;
+
     //validation
     let errorList = []
     if(newData.instructor_type === ""){
@@ -92,11 +199,14 @@ function Timetable({selcourse}) {
     if(newData.section_type === ""){
       errorList.push("Please enter section type")
     }
-    if(newData.days === ""){
-      errorList.push("Please enter days")
+    if(newData.day1 === ""){
+      errorList.push("Please enter day 1")
     }
-    if(newData.time === ""){
-      errorList.push("Please enter time")
+    if(newData.start_time === ""){
+      errorList.push("Please enter start time")
+    }
+    if(newData.end_time === ""){
+      errorList.push("Please enter end time")
     }
     if(newData.location === ""){
       errorList.push("Please enter location")
@@ -106,6 +216,12 @@ function Timetable({selcourse}) {
     }
     if(newData.studentsPerInstructor === ""){
       errorList.push("Please enter students per instructor")
+    }
+    if(newData.hoursPerWeek !== "" && !regExp.test(newData.hoursPerWeek)){
+      errorList.push("Error in Hours Per Week - Enter integers only")
+    }
+    if(newData.studentsPerInstructor !== "" && !regExp.test(newData.studentsPerInstructor)){
+      errorList.push("Error in Students Per Instructor - Enter integers only")
     }
 
     if(errorList.length < 1){
@@ -132,6 +248,8 @@ function Timetable({selcourse}) {
   }
 
   const handleRowAdd = (newData, resolve) => {
+    var regExp = /^[0-9]*[.]?[0-9]*$/;
+
     //validation
     let errorList = []
     if(newData.instructor_type === undefined){
@@ -143,11 +261,14 @@ function Timetable({selcourse}) {
     if(newData.section_type === undefined){
       errorList.push("Please enter section type")
     }
-    if(newData.days === undefined){
+    if(newData.day1 === undefined){
       errorList.push("Please enter days")
     }
-    if(newData.time === undefined){
-      errorList.push("Please enter time")
+    if(newData.start_time === undefined){
+      errorList.push("Please enter start time")
+    }
+    if(newData.end_time === undefined){
+      errorList.push("Please enter end time")
     }
     if(newData.location === undefined){
       errorList.push("Please enter location")
@@ -158,14 +279,22 @@ function Timetable({selcourse}) {
     if(newData.studentsPerInstructor === undefined){
       errorList.push("Please enter students per instructor")
     }
+    if(newData.hoursPerWeek !== undefined && !regExp.test(newData.hoursPerWeek)){
+      errorList.push("Error in Hours Per Week - Enter integers only")
+    }
+    if(newData.studentsPerInstructor !== undefined && !regExp.test(newData.studentsPerInstructor)){
+      errorList.push("Error in Students Per Instructor - Enter integers only")
+    }
 
     let timetableData = {
       course_id: selcourse,
       instructor_type: newData.instructor_type,
       section: newData.section,
       section_type: newData.section_type,
-      days: newData.days,
-      time: newData.time,
+      day1: newData.day1,
+      day2: newData.day2,
+      start_time: newData.start_time,
+      end_time: newData.end_time,
       location: newData.location,
       hoursPerWeek: newData.hoursPerWeek,
       studentsPerInstructor: newData.studentsPerInstructor,
