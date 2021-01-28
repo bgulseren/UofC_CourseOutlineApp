@@ -55,7 +55,15 @@ function Textbook({selcourse}) {
     {title: "Edition", field: "edition"},
     {title: "Year", field: "year"},
     {title: "Publisher", field: "publisher"},
-    {title: "Recommended?", field: "is_recommended"},
+    {
+      title: "Recommended",
+      field: "is_recommended",
+      lookup:
+       {
+         1:"Recommended",
+         2:"Required",
+       } 
+    },
   ]
   const [data, setData] = useState([]); //table data
 
@@ -79,6 +87,8 @@ function Textbook({selcourse}) {
   }
 
   const handleRowUpdate = (newData, oldData, resolve) => {
+    var regExp = /^[0-9]*[.]?[0-9]*$/;
+
     //validation
     let errorList = []
     if(newData.title === ""){
@@ -98,6 +108,12 @@ function Textbook({selcourse}) {
     }
     if(newData.is_recommended === ""){
       errorList.push("Please enter recommended")
+    }
+    if(newData.year !== "" && !regExp.test(newData.year)){
+      errorList.push("Error in Year - Enter integers only")
+    }
+    if(newData.edition !== "" && !regExp.test(newData.edition)){
+      errorList.push("Error in Edition - Enter integers only")
     }
 
     if(errorList.length < 1){
@@ -124,6 +140,8 @@ function Textbook({selcourse}) {
   }
 
   const handleRowAdd = (newData, resolve) => {
+    var regExp = /^[0-9]*[.]?[0-9]*$/;
+
     //validation
     let errorList = []
     if(newData.title === undefined){
@@ -143,6 +161,12 @@ function Textbook({selcourse}) {
     }
     if(newData.is_recommended === undefined){
       errorList.push("Please enter recommended")
+    }
+    if(newData.year !== undefined && !regExp.test(newData.year)){
+      errorList.push("Error in Year - Enter integers only")
+    }
+    if(newData.edition !== undefined && !regExp.test(newData.edition)){
+      errorList.push("Error in Edition - Enter integers only")
     }
 
     let textbookData = {
