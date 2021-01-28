@@ -331,17 +331,19 @@ export default function GradeBreakdown({ selcourse }) {
         valueLabelDisplay='on'
       />
 
-      <Button
-        variant='contained'
-        color='primary'
-        size='small'
-        startIcon={<SaveIcon />}
-        disabled={!changedData}
-        className={classes.button}
-        onClick={clickSaveHandler}
-      >
-        Save
-      </Button>
+      {changedData && (
+        <Button
+          variant='contained'
+          color='primary'
+          size='small'
+          startIcon={<SaveIcon />}
+          disabled={!changedData}
+          className={classes.button}
+          onClick={clickSaveHandler}
+        >
+          Save
+        </Button>
+      )}
     </div>
   )
 }

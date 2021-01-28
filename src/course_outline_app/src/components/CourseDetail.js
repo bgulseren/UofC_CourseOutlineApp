@@ -131,6 +131,21 @@ function CourseDetail({ selcourse }) {
 
   return (
     <form className={classes.root} noValidate autoComplete='off'>
+      {changedData && (
+        <div>
+          <Button
+            variant='contained'
+            color='primary'
+            size='small'
+            startIcon={<SaveIcon />}
+            disabled={!changedData}
+            className={classes.button}
+            onClick={clickSaveHandler}
+          >
+            Save
+          </Button>
+        </div>
+      )}
       <div>
         <TextField
           id='course-description'
@@ -165,7 +180,8 @@ function CourseDetail({ selcourse }) {
           onChange={handleChangeCalendarRef}
           variant='outlined'
         />
-
+      </div>
+      <div>
         <TextField
           id='exam-policy'
           label='Examination Policy'
@@ -175,7 +191,8 @@ function CourseDetail({ selcourse }) {
           onChange={handleExamPolicy}
           variant='outlined'
         />
-
+      </div>
+      <div>
         <TextField
           id='calc-policy'
           label='Calculator Policy'
@@ -185,7 +202,8 @@ function CourseDetail({ selcourse }) {
           onChange={handleCalcPolicy}
           variant='outlined'
         />
-
+      </div>
+      <div>
         <TextField
           id='course-policy'
           label='Course Policy'
@@ -195,18 +213,6 @@ function CourseDetail({ selcourse }) {
           onChange={handleCoursePolicy}
           variant='outlined'
         />
-
-        <Button
-          variant='contained'
-          color='primary'
-          size='small'
-          startIcon={<SaveIcon />}
-          disabled={!changedData}
-          className={classes.button}
-          onClick={clickSaveHandler}
-        >
-          Save
-        </Button>
       </div>
     </form>
   )

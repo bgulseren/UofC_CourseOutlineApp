@@ -35,6 +35,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import Button from '@material-ui/core/Button'
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -89,6 +90,9 @@ function Course({ selinstructor }) {
   const [errorMessages, setErrorMessages] = useState([])
 
   const [isactive, setIsactive] = useState(true)
+  const [pdfactive, setPdfactive] = useState(false)
+  const [pdfbutton, setPdfbutton] = useState('Switch to Printable View')
+
   const [selcourse, setSelcourse] = useState(-1)
 
   const [headermessage, setHeadermessage] = useState(
@@ -103,6 +107,15 @@ function Course({ selinstructor }) {
     setIsactive(false)
     setHeadermessage('Selected course: ' + course.code + ' - ' + course.name)
     setSelcourse(course.id)
+  }
+
+  const clickPDFView = () => {
+    setPdfactive(!pdfactive)
+    if (pdfbutton === 'Close Printable View') {
+      setPdfbutton('Switch to Printable View')
+    } else {
+      setPdfbutton('Close Printable View')
+    }
   }
 
   const refresh = () => {
@@ -221,6 +234,7 @@ function Course({ selinstructor }) {
 
   return (
     <div className='Course'>
+      <Typography>{headermessage}</Typography>
       <div>
         {iserror && (
           <Alert severity='error'>
@@ -230,7 +244,6 @@ function Course({ selinstructor }) {
           </Alert>
         )}
       </div>
-      <h4>{headermessage}</h4>
       {isactive && (
         <MaterialTable
           title='List of Courses'
@@ -260,7 +273,7 @@ function Course({ selinstructor }) {
         />
       )}
 
-      {!isactive && (
+      {!isactive && !pdfactive && (
         <div>
           <CourseDetail selcourse={selcourse} />
 
@@ -349,6 +362,50 @@ function Course({ selinstructor }) {
               <GradeBreakdown selcourse={selcourse} />
             </AccordionDetails>
           </Accordion>
+        </div>
+      )}
+
+      {pdfactive && (
+        <div>
+          <CourseDetail selcourse={selcourse} />
+
+          <Typography className={classes.heading}>Learning Outcomes</Typography>
+
+          <LearningOutcome selcourse={selcourse} />
+
+          <Typography className={classes.heading}>Timetable</Typography>
+
+          <Timetable selcourse={selcourse} />
+
+          <Typography className={classes.heading}>
+            Course Instructors
+          </Typography>
+          <CourseInstructor selcourse={selcourse} />
+
+          <Typography className={classes.heading}>Grade Components</Typography>
+
+          <GradeComponent selcourse={selcourse} />
+
+          <Typography className={classes.heading}>Textbooks</Typography>
+
+          <Textbook selcourse={selcourse} />
+
+          <Typography className={classes.heading}>Grade Breakdown</Typography>
+          <GradeBreakdown selcourse={selcourse} />
+        </div>
+      )}
+
+      {!isactive && (
+        <div>
+          <Button
+            variant='contained'
+            color='primary'
+            size='small'
+            className={classes.button}
+            onClick={clickPDFView}
+          >
+            {pdfbutton}
+          </Button>
         </div>
       )}
     </div>
