@@ -52,6 +52,12 @@ class TimetableViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['course_id']
 
+class CourseInstructorViewSet(viewsets.ModelViewSet): 
+    queryset = CourseInstructor.objects.all()
+    serializer_class = CourseInstructorSerializer
+    permission_classes = [permissions.AllowAny]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['course_id']
 
 class GradeComponentViewSet(viewsets.ModelViewSet): 
     queryset = GradeComponent.objects.all()

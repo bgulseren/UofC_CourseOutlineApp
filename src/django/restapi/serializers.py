@@ -38,7 +38,13 @@ class TimetableSerializer(serializers.ModelSerializer):
     # specify model and fields 
     class Meta: 
         model = Timetable
-        fields = ['id', 'course_id', 'instructor_type', 'section', 'section_type', 'day1', 'day2', 'start_time', 'end_time', 'location', 'hoursPerWeek', 'studentsPerInstructor']
+        fields = ['id', 'course_id', 'section', 'section_type', 'day1', 'day2', 'start_time', 'end_time', 'location', 'hoursPerWeek', 'studentsPerInstructor']
+
+class CourseInstructorSerializer(serializers.ModelSerializer): 
+    # specify model and fields 
+    class Meta: 
+        model = CourseInstructor
+        fields = ['id', 'course_id', 'instructor_type', 'first_name', 'last_name', 'phone', 'office', 'email']
 
 class GradeComponentSerializer(serializers.ModelSerializer): 
     # specify model and fields 

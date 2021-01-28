@@ -7,6 +7,7 @@ import CourseDetail from './CourseDetail'
 import GradeComponent from './GradeComponent'
 import LearningOutcome from './LearningOutcome'
 import Timetable from './Timetable'
+import CourseInstructor from './CourseInstructor'
 import Textbook from './Textbook'
 import GradeBreakdown from './GradeBreakdown'
 
@@ -300,6 +301,21 @@ function Course({ selinstructor }) {
             </AccordionSummary>
             <AccordionDetails>
               <Timetable selcourse={selcourse} />
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls='panel1a-content'
+              id='panel1a-header'
+            >
+              <Typography className={classes.heading}>
+                Course Instructors
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <CourseInstructor selcourse={selcourse} />
             </AccordionDetails>
           </Accordion>
 
