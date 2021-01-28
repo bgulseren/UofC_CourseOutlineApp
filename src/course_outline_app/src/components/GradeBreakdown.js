@@ -26,23 +26,26 @@ export default function GradeBreakdown({ selcourse }) {
   const classes = useStyles()
 
   const [data, setData] = React.useState({
+    id: 0,
     course_id: selcourse,
     ap: 100,
-    an: 100,
-    am: 100,
-    bp: 100,
-    bn: 100,
-    bm: 100,
-    cp: 100,
-    cn: 100,
-    cm: 100,
-    dp: 100,
-    dn: 100,
+    an: 99,
+    am: 98,
+    bp: 97,
+    bn: 96,
+    bm: 95,
+    cp: 94,
+    cn: 93,
+    cm: 92,
+    dp: 91,
+    dn: 90,
   })
 
   //for error handling
   const [iserror, setIserror] = useState(false)
   const [errorMessages, setErrorMessages] = useState([])
+
+  const [changedData, setChangedData] = useState(false)
 
   useEffect(() => {
     refresh()
@@ -53,30 +56,8 @@ export default function GradeBreakdown({ selcourse }) {
     api
       .get('/gradeBreakdowns?course_id=' + selcourse)
       .then((res) => {
-        console.log(res.data[0])
-
         if (res.data[0] === undefined) {
-          console.log(
-            'No grade breakdown found, setting default recommended values'
-          )
-          let gradeData = {
-            course_id: selcourse,
-            ap: 100,
-            an: 99,
-            am: 98,
-            bp: 97,
-            bn: 96,
-            bm: 95,
-            cp: 94,
-            cn: 93,
-            cm: 92,
-            dp: 91,
-            dn: 90,
-          }
-
-          setData(gradeData)
-
-          api.post('/gradeBreakdowns/', gradeData)
+          api.post('/gradeBreakdowns/', data)
         } else {
           setData(res.data[0])
         }
@@ -123,8 +104,7 @@ export default function GradeBreakdown({ selcourse }) {
       setErrorMessages([])
       setIserror(false)
       api.patch('/gradeBreakdowns/' + data.id + '/', data)
-      // make save button invisible again since data is submit to remote
-      // setChangedData(false)
+      setChangedData(false)
     } else {
       setErrorMessages(errorList)
       setIserror(true)
@@ -135,66 +115,77 @@ export default function GradeBreakdown({ selcourse }) {
     let dataCopy = { ...data }
     dataCopy.ap = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeAn = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.an = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeAm = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.am = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeBp = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.bp = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeBn = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.bn = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeBm = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.bm = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeCp = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.cp = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeCn = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.cn = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeCm = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.cm = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeDp = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.dp = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   const handleChangeDn = (event, newValue) => {
     let dataCopy = { ...data }
     dataCopy.dn = newValue
     setData(dataCopy)
+    setChangedData(true)
   }
 
   return (
@@ -215,7 +206,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.ap}
         onChange={handleChangeAp}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -228,7 +218,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.an}
         onChange={handleChangeAn}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -241,7 +230,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.am}
         onChange={handleChangeAm}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -254,7 +242,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.bp}
         onChange={handleChangeBp}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -267,7 +254,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.bn}
         onChange={handleChangeBn}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -280,7 +266,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.bm}
         onChange={handleChangeBm}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -293,7 +278,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.cp}
         onChange={handleChangeCp}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -306,7 +290,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.cn}
         onChange={handleChangeCn}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -319,7 +302,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.cm}
         onChange={handleChangeCm}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -332,7 +314,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.dp}
         onChange={handleChangeDp}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -345,7 +326,6 @@ export default function GradeBreakdown({ selcourse }) {
         track='inverted'
         value={data.dn}
         onChange={handleChangeDn}
-        valueLabelDisplay='auto'
         aria-labelledby='range-slider'
         getAriaValueText={valuetext}
         valueLabelDisplay='on'
@@ -356,7 +336,7 @@ export default function GradeBreakdown({ selcourse }) {
         color='primary'
         size='small'
         startIcon={<SaveIcon />}
-        // disabled={!changedData}
+        disabled={!changedData}
         className={classes.button}
         onClick={clickSaveHandler}
       >
