@@ -63,6 +63,8 @@ function GradeComponent({ selcourse }) {
   const [iserror, setIserror] = useState(false)
   const [errorMessages, setErrorMessages] = useState([])
 
+  const [totalWeight, setTotalWeight] = useState(0)
+
   useEffect(() => {
     refresh()
   }, [])
@@ -73,6 +75,13 @@ function GradeComponent({ selcourse }) {
       .get('/gradeComponents?course_id=' + selcourse)
       .then((res) => {
         setData(res.data)
+
+        const newTotalWeight = res.data.reduce(
+          (totalW, comp) => totalW + parseInt(comp.weight, 10),
+          0
+        )
+
+        setTotalWeight(newTotalWeight)
       })
       .catch((error) => {
         console.log('Error')
@@ -92,6 +101,15 @@ function GradeComponent({ selcourse }) {
     }
     if (newData.weight === '') {
       errorList.push('Please enter grade component weight percentage')
+    }
+
+    if (
+      parseInt(newData.weight, 10) +
+        totalWeight -
+        parseInt(oldData.weight, 10) >
+      100
+    ) {
+      errorList.push('Total grade component weight percentage exceeding %100')
     }
 
     if (errorList.length < 1) {
@@ -128,6 +146,10 @@ function GradeComponent({ selcourse }) {
     }
     if (newData.weight === undefined) {
       errorList.push('Please enter grade component weight percentage')
+    }
+
+    if (parseInt(newData.weight, 10) + totalWeight > 100) {
+      errorList.push('Total grade component weight percentage exceeding %100')
     }
 
     let gradeComponentData = {
