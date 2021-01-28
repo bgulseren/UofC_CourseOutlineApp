@@ -81,10 +81,6 @@ function Course({ selinstructor }) {
     { title: 'Instructor', field: 'instructor', hidden: true },
     { title: 'Course code', field: 'code' },
     { title: 'Course name', field: 'name' },
-    { title: 'Description', field: 'description', hidden: true },
-    { title: 'Hours', field: 'hours' },
-    { title: 'Calendar Reference', field: 'calendar_ref', hidden: true },
-    { title: 'Grade Breakdown', field: 'grade_breakdown', hidden: true },
   ]
   const [data, setData] = useState([]) //table data
 
@@ -96,7 +92,7 @@ function Course({ selinstructor }) {
   const [selcourse, setSelcourse] = useState(-1)
 
   const [headermessage, setHeadermessage] = useState(
-    '2. Select a course from the list'
+    'Select a course or add a new one if not existing...'
   )
 
   useEffect(() => {
@@ -130,18 +126,11 @@ function Course({ selinstructor }) {
     if (newData.name === '') {
       errorList.push('Please enter course name')
     }
-    if (newData.hours === '') {
-      errorList.push('Please enter course hours per week')
-    }
 
     let courseData = {
       instructor: selinstructor,
       code: newData.code,
       name: newData.name,
-      description: newData.description,
-      hours: newData.hours,
-      calendar_ref: newData.calendar_ref,
-      grade_breakdown: newData.grade_breakdown,
     }
 
     if (errorList.length < 1) {
@@ -176,18 +165,17 @@ function Course({ selinstructor }) {
     if (newData.name === undefined) {
       errorList.push('Please enter course name')
     }
-    if (newData.hours === undefined) {
-      errorList.push('Please enter course hours per week')
-    }
 
     let courseData = {
       instructor: selinstructor,
       code: newData.code,
       name: newData.name,
-      description: 'a',
-      hours: newData.hours,
-      calendar_ref: 'a',
-      grade_breakdown: 'a',
+      description: 'Course description needs to be edited.',
+      hours: '1',
+      calendar_ref: 'Calendar reference needs to be edited.',
+      exam_policy: 'Exam policy needs to be edited.',
+      calc_policy: 'Calculator policy needs to be edited.',
+      course_policy: 'Course policy needs to be edited.',
     }
 
     if (errorList.length < 1) {
