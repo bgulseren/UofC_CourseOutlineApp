@@ -72,8 +72,20 @@ function Timetable({selcourse}) {
        } 
     },
     {
-      title: "Days",
-      field: "days",
+      title: "Day 1",
+      field: "day1",
+      lookup:
+       {
+         1:"Monday",
+         2:"Tuesday",
+         3:"Wednesday",
+         4:"Thursday",
+         5:"Friday"
+       } 
+    },
+    {
+      title: "Day 2",
+      field: "day2",
       lookup:
        {
          1:"Monday",
@@ -187,11 +199,14 @@ function Timetable({selcourse}) {
     if(newData.section_type === ""){
       errorList.push("Please enter section type")
     }
-    if(newData.days === ""){
-      errorList.push("Please enter days")
+    if(newData.day1 === ""){
+      errorList.push("Please enter day 1")
     }
-    if(newData.time === ""){
-      errorList.push("Please enter time")
+    if(newData.start_time === ""){
+      errorList.push("Please enter start time")
+    }
+    if(newData.end_time === ""){
+      errorList.push("Please enter end time")
     }
     if(newData.location === ""){
       errorList.push("Please enter location")
@@ -246,11 +261,14 @@ function Timetable({selcourse}) {
     if(newData.section_type === undefined){
       errorList.push("Please enter section type")
     }
-    if(newData.days === undefined){
+    if(newData.day1 === undefined){
       errorList.push("Please enter days")
     }
-    if(newData.time === undefined){
-      errorList.push("Please enter time")
+    if(newData.start_time === undefined){
+      errorList.push("Please enter start time")
+    }
+    if(newData.end_time === undefined){
+      errorList.push("Please enter end time")
     }
     if(newData.location === undefined){
       errorList.push("Please enter location")
@@ -273,8 +291,10 @@ function Timetable({selcourse}) {
       instructor_type: newData.instructor_type,
       section: newData.section,
       section_type: newData.section_type,
-      days: newData.days,
-      time: newData.time,
+      day1: newData.day1,
+      day2: newData.day2,
+      start_time: newData.start_time,
+      end_time: newData.end_time,
       location: newData.location,
       hoursPerWeek: newData.hoursPerWeek,
       studentsPerInstructor: newData.studentsPerInstructor,
